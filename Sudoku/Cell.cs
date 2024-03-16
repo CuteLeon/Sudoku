@@ -29,12 +29,13 @@ public partial class Cell : UserControl
         {
             for (int y = 0; y < cellRowCount; y++)
             {
-                var prob = new Label()
+                var prob = new Prob()
                 {
                     TextAlign = ContentAlignment.MiddleCenter,
                     Margin = Padding.Empty,
                     Dock = DockStyle.Fill,
-                    Tag = x + y * cellRowCount + 1
+                    Number = x + y * cellRowCount + 1,
+                    Toggle = false
                 };
                 prob.MouseUp += this.Prob_MouseUp;
                 this.MainProbsPanel.Controls.Add(prob);
@@ -45,19 +46,18 @@ public partial class Cell : UserControl
 
     private void Prob_MouseUp(object? sender, MouseEventArgs e)
     {
-        if (sender is not Label prob) return;
+        if (sender is not Prob prob) return;
         if (e.Button == MouseButtons.Left)
         {
-            prob.Text = string.IsNullOrEmpty(prob.Text) ? prob.Tag!.ToString() : string.Empty;
+            prob.Toggle = !prob.Toggle;
         }
         else if (e.Button == MouseButtons.Right)
         {
             this.MainProbsPanel.Hide();
             this.MainLabel.Show();
-            this.MainLabel.Text = prob.Tag!.ToString();
+            this.MainLabel.Text = prob.Number.ToString();
         }
     }
-
 
     private void MainLabel_MouseUp(object sender, MouseEventArgs e)
     {
