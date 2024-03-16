@@ -28,9 +28,31 @@ partial class Cell
     /// </summary>
     private void InitializeComponent()
     {
-        components = new System.ComponentModel.Container();
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        this.MainProbsPanel = new TableLayoutPanel();
+        this.SuspendLayout();
+        // 
+        // MainProbsPanel
+        // 
+        this.MainProbsPanel.ColumnCount = 1;
+        this.MainProbsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        this.MainProbsPanel.Dock = DockStyle.Fill;
+        this.MainProbsPanel.Location = new Point(0, 0);
+        this.MainProbsPanel.Name = "MainProbsPanel";
+        this.MainProbsPanel.RowCount = 1;
+        this.MainProbsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        this.MainProbsPanel.Size = new Size(150, 150);
+        this.MainProbsPanel.TabIndex = 0;
+        // 
+        // Cell
+        // 
+        this.AutoScaleDimensions = new SizeF(8F, 20F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.Controls.Add(this.MainProbsPanel);
+        this.Name = "Cell";
+        this.ResumeLayout(false);
     }
 
     #endregion
+
+    private TableLayoutPanel MainProbsPanel;
 }
