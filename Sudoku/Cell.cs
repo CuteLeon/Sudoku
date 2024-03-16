@@ -2,6 +2,44 @@
 
 public partial class Cell : UserControl
 {
+    private int? confirmedNumber;
+    private int realNumber;
+    private bool numberMatched;
+
+    public int RealNumber
+    {
+        get => realNumber;
+        set
+        {
+            realNumber = value;
+            this.NumberMatched = this.ConfirmedNumber.HasValue && this.ConfirmedNumber.Value == value;
+        }
+    }
+
+    public int? ConfirmedNumber
+    {
+        get => confirmedNumber;
+        set
+        {
+            confirmedNumber = value;
+            this.MainProbsPanel.Visible = !value.HasValue;
+            this.MainLabel.Visible = value.HasValue;
+            this.MainLabel.Text = value.ToString();
+            this.NumberMatched = value.HasValue && value.Value == this.RealNumber;
+        }
+    }
+
+    public bool NumberMatched
+    {
+        get => numberMatched;
+        set
+        {
+            numberMatched = value;
+            this.BackColor = this.ConfirmedNumber.HasValue && this.ConfirmedNumber.Value != this.RealNumber ?
+                Color.Red : Color.Transparent;
+        }
+    }
+
     public Cell()
     {
         InitializeComponent();
@@ -53,9 +91,7 @@ public partial class Cell : UserControl
         }
         else if (e.Button == MouseButtons.Right)
         {
-            this.MainProbsPanel.Hide();
-            this.MainLabel.Show();
-            this.MainLabel.Text = prob.Number.ToString();
+            this.ConfirmedNumber = prob.Number;
         }
     }
 
@@ -63,9 +99,7 @@ public partial class Cell : UserControl
     {
         if (e.Button == MouseButtons.Right)
         {
-            this.MainLabel.Hide();
-            this.MainProbsPanel.Show();
-            this.MainLabel.Text = string.Empty;
+            this.ConfirmedNumber = default;
         }
     }
 }
