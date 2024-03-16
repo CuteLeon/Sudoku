@@ -28,8 +28,16 @@ partial class Board
     /// </summary>
     private void InitializeComponent()
     {
-        components = new System.ComponentModel.Container();
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        this.SuspendLayout();
+        // 
+        // Board
+        // 
+        this.AutoScaleDimensions = new SizeF(8F, 20F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.BorderStyle = BorderStyle.FixedSingle;
+        this.Name = "Board";
+        this.Size = new Size(600, 600);
+        this.ResumeLayout(false);
     }
 
     #endregion
