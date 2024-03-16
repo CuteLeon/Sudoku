@@ -30,13 +30,14 @@ partial class MainForm
     {
         SuspendLayout();
         // 
-        // Form1
+        // MainForm
         // 
-        AutoScaleDimensions = new SizeF(10F, 25F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 450);
-        Name = "Form1";
-        Text = "Form1";
+        ClientSize = new Size(640, 360);
+        Margin = new Padding(2, 2, 2, 2);
+        Name = "MainForm";
+        Text = "Sudoku";
         ResumeLayout(false);
     }
 
