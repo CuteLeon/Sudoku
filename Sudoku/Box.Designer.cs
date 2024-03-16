@@ -28,9 +28,33 @@ partial class Box
     /// </summary>
     private void InitializeComponent()
     {
-        components = new System.ComponentModel.Container();
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        this.MainCellsPanel = new TableLayoutPanel();
+        this.SuspendLayout();
+        // 
+        // MainCellsPanel
+        // 
+        this.MainCellsPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        this.MainCellsPanel.ColumnCount = 1;
+        this.MainCellsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        this.MainCellsPanel.Dock = DockStyle.Fill;
+        this.MainCellsPanel.Location = new Point(0, 0);
+        this.MainCellsPanel.Name = "MainCellsPanel";
+        this.MainCellsPanel.RowCount = 1;
+        this.MainCellsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        this.MainCellsPanel.Size = new Size(200, 200);
+        this.MainCellsPanel.TabIndex = 0;
+        // 
+        // Box
+        // 
+        this.AutoScaleDimensions = new SizeF(8F, 20F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.Controls.Add(this.MainCellsPanel);
+        this.Name = "Box";
+        this.Size = new Size(200, 200);
+        this.ResumeLayout(false);
     }
 
     #endregion
+
+    private TableLayoutPanel MainCellsPanel;
 }
