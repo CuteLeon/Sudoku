@@ -28,20 +28,34 @@ partial class MainForm
     /// </summary>
     private void InitializeComponent()
     {
-        SuspendLayout();
+        this.MainToolStrip = new ToolStrip();
+        this.SuspendLayout();
+        // 
+        // MainToolStrip
+        // 
+        this.MainToolStrip.ImageScalingSize = new Size(20, 20);
+        this.MainToolStrip.Location = new Point(0, 0);
+        this.MainToolStrip.Name = "MainToolStrip";
+        this.MainToolStrip.Size = new Size(600, 25);
+        this.MainToolStrip.TabIndex = 0;
         // 
         // MainForm
         // 
-        AutoScaleDimensions = new SizeF(8F, 20F);
-        AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(600, 600);
-        DoubleBuffered = true;
-        Margin = new Padding(2);
-        Name = "MainForm";
-        StartPosition = FormStartPosition.CenterScreen;
-        Text = "Sudoku";
-        ResumeLayout(false);
+        this.AutoScaleDimensions = new SizeF(8F, 20F);
+        this.AutoScaleMode = AutoScaleMode.Font;
+        this.ClientSize = new Size(600, 625);
+        this.Controls.Add(this.MainToolStrip);
+        this.DoubleBuffered = true;
+        this.Margin = new Padding(2);
+        this.Name = "MainForm";
+        this.StartPosition = FormStartPosition.CenterScreen;
+        this.Text = "Sudoku";
+        this.ResumeLayout(false);
+        this.PerformLayout();
     }
 
     #endregion
+
+    private ToolTip toolTip1;
+    private ToolStrip MainToolStrip;
 }
