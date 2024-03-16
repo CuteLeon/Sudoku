@@ -42,8 +42,6 @@ partial class MainForm
         // 
         // MainBoard
         // 
-        this.MainBoard.BackColor = SystemColors.ActiveCaptionText;
-        this.MainBoard.BorderStyle = BorderStyle.FixedSingle;
         this.MainBoard.Dock = DockStyle.Fill;
         this.MainBoard.Location = new Point(0, 25);
         this.MainBoard.Name = "MainBoard";
