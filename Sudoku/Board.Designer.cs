@@ -34,9 +34,9 @@ partial class Board
         // 
         this.AutoScaleDimensions = new SizeF(8F, 20F);
         this.AutoScaleMode = AutoScaleMode.Font;
-        this.BorderStyle = BorderStyle.FixedSingle;
+        this.BackColor = Color.White;
         this.Name = "Board";
-        this.Size = new Size(600, 600);
+        this.Size = new Size(602, 602);
         this.ResumeLayout(false);
     }
 

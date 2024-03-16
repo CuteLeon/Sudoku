@@ -8,6 +8,5 @@ public partial class MainForm : Form
     {
         Icon = AppResource.Icon;
         InitializeComponent();
-        Debug.Print($"{this.ClientSize} / {this.Size}");
     }
 }

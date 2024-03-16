@@ -29,6 +29,7 @@ partial class MainForm
     private void InitializeComponent()
     {
         this.MainToolStrip = new ToolStrip();
+        this.MainBoard = new Board();
         this.SuspendLayout();
         // 
         // MainToolStrip
@@ -39,11 +40,22 @@ partial class MainForm
         this.MainToolStrip.Size = new Size(600, 25);
         this.MainToolStrip.TabIndex = 0;
         // 
+        // MainBoard
+        // 
+        this.MainBoard.BackColor = SystemColors.ActiveCaptionText;
+        this.MainBoard.BorderStyle = BorderStyle.FixedSingle;
+        this.MainBoard.Dock = DockStyle.Fill;
+        this.MainBoard.Location = new Point(0, 25);
+        this.MainBoard.Name = "MainBoard";
+        this.MainBoard.Size = new Size(600, 600);
+        this.MainBoard.TabIndex = 1;
+        // 
         // MainForm
         // 
         this.AutoScaleDimensions = new SizeF(8F, 20F);
         this.AutoScaleMode = AutoScaleMode.Font;
         this.ClientSize = new Size(600, 625);
+        this.Controls.Add(this.MainBoard);
         this.Controls.Add(this.MainToolStrip);
         this.DoubleBuffered = true;
         this.Margin = new Padding(2);
@@ -58,4 +70,5 @@ partial class MainForm
 
     private ToolTip toolTip1;
     private ToolStrip MainToolStrip;
+    private Board MainBoard;
 }
