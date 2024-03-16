@@ -30,7 +30,6 @@ partial class Cell
     {
         this.MainProbsPanel = new TableLayoutPanel();
         this.MainLabel = new Label();
-        this.MainProbsPanel.SuspendLayout();
         this.SuspendLayout();
         // 
         // MainProbsPanel
@@ -49,9 +48,9 @@ partial class Cell
         // 
         this.MainLabel.Dock = DockStyle.Fill;
         this.MainLabel.Font = new Font("Segoe UI", 28F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        this.MainLabel.Location = new Point(3, 0);
+        this.MainLabel.Location = new Point(0, 0);
         this.MainLabel.Name = "MainLabel";
-        this.MainLabel.Size = new Size(144, 150);
+        this.MainLabel.Size = new Size(150, 150);
         this.MainLabel.TabIndex = 0;
         this.MainLabel.TextAlign = ContentAlignment.MiddleCenter;
         // 
@@ -62,7 +61,6 @@ partial class Cell
         this.Controls.Add(this.MainProbsPanel);
         this.Controls.Add(this.MainLabel);
         this.Name = "Cell";
-        this.MainProbsPanel.ResumeLayout(false);
         this.ResumeLayout(false);
     }
 

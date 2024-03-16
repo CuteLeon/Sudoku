@@ -33,7 +33,7 @@ partial class Board
         // 
         // MainBoxesPanel
         // 
-        this.MainBoxesPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+        this.MainBoxesPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
         this.MainBoxesPanel.ColumnCount = 1;
         this.MainBoxesPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         this.MainBoxesPanel.Dock = DockStyle.Fill;

@@ -32,13 +32,20 @@ public partial class Cell : UserControl
                 var prob = new Label()
                 {
                     TextAlign = ContentAlignment.MiddleCenter,
-                    Text = $"{x + y * cellRowCount}",
                     Margin = Padding.Empty,
-                    Dock = DockStyle.Fill
+                    Dock = DockStyle.Fill,
+                    Tag = x + y * cellRowCount + 1
                 };
+                prob.Click += this.Prob_Click;
                 this.MainProbsPanel.Controls.Add(prob);
                 this.MainProbsPanel.SetCellPosition(prob, new TableLayoutPanelCellPosition(x, y));
             }
         }
+    }
+
+    private void Prob_Click(object? sender, EventArgs e)
+    {
+        if (sender is not Label prob) return;
+        prob.Text = string.IsNullOrEmpty(prob.Text) ? prob.Tag!.ToString() : string.Empty;
     }
 }
