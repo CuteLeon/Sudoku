@@ -30,7 +30,8 @@ public partial class Board : UserControl
         {
             for (int y = 0; y < boxRowCount; y++)
             {
-                this.MainBoxesPanel.SetCellPosition(new Box(), new TableLayoutPanelCellPosition(x, y));
+                var box = new Box() { Dock = DockStyle.Fill };
+                this.MainBoxesPanel.SetCellPosition(box, new TableLayoutPanelCellPosition(x, y));
             }
         }
     }

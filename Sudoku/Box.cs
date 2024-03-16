@@ -23,5 +23,15 @@ public partial class Box : UserControl
         for (int i = 0; i < cellColumnCount; i++)
             this.MainCellsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, columnPercent));
         this.MainCellsPanel.ColumnCount = cellColumnCount;
+
+        this.MainCellsPanel.Controls.Clear();
+        for (int x = 0; x < cellColumnCount; x++)
+        {
+            for (int y = 0; y < cellRowCount; y++)
+            {
+                var cell = new Cell() { Dock = DockStyle.Fill };
+                this.MainCellsPanel.SetCellPosition(cell, new TableLayoutPanelCellPosition(x, y));
+            }
+        }
     }
 }
