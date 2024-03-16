@@ -12,14 +12,16 @@ public partial class Box : UserControl
         this.MainCellsPanel.ColumnStyles.Clear();
         this.MainCellsPanel.ColumnCount = 0;
 
-        var rowPercent = 1.0f / Contracts.CellRowCount;
-        for (int i = 0; i < Contracts.CellRowCount; i++)
+        var cellRowCount = Contracts.CellRowCount;
+        var rowPercent = 1.0f / cellRowCount;
+        for (int i = 0; i < cellRowCount; i++)
             this.MainCellsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, rowPercent));
-        this.MainCellsPanel.RowCount = Contracts.CellRowCount;
+        this.MainCellsPanel.RowCount = cellRowCount;
 
-        var columnPercent = 1.0f / Contracts.CellColumnCount;
-        for (int i = 0; i < Contracts.CellColumnCount; i++)
+        var cellColumnCount = Contracts.CellColumnCount;
+        var columnPercent = 1.0f / cellColumnCount;
+        for (int i = 0; i < cellColumnCount; i++)
             this.MainCellsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, columnPercent));
-        this.MainCellsPanel.ColumnCount = Contracts.CellColumnCount;
+        this.MainCellsPanel.ColumnCount = cellColumnCount;
     }
 }
