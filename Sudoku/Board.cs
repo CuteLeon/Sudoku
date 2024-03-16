@@ -30,7 +30,12 @@ public partial class Board : UserControl
         {
             for (int y = 0; y < boxRowCount; y++)
             {
-                var box = new Box() { Dock = DockStyle.Fill };
+                var box = new Box()
+                {
+                    Margin = Padding.Empty,
+                    Dock = DockStyle.Fill
+                };
+                this.MainBoxesPanel.Controls.Add(box);
                 this.MainBoxesPanel.SetCellPosition(box, new TableLayoutPanelCellPosition(x, y));
             }
         }
