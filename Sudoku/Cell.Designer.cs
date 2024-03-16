@@ -53,6 +53,7 @@ partial class Cell
         this.MainLabel.Size = new Size(150, 150);
         this.MainLabel.TabIndex = 0;
         this.MainLabel.TextAlign = ContentAlignment.MiddleCenter;
+        this.MainLabel.DoubleClick += this.MainLabel_DoubleClick;
         // 
         // Cell
         // 

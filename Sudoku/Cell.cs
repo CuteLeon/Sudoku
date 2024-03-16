@@ -37,15 +37,31 @@ public partial class Cell : UserControl
                     Tag = x + y * cellRowCount + 1
                 };
                 prob.Click += this.Prob_Click;
+                prob.DoubleClick += this.Prob_DoubleClick;
                 this.MainProbsPanel.Controls.Add(prob);
                 this.MainProbsPanel.SetCellPosition(prob, new TableLayoutPanelCellPosition(x, y));
             }
         }
     }
 
+    private void Prob_DoubleClick(object? sender, EventArgs e)
+    {
+        if (sender is not Label prob) return;
+        this.MainProbsPanel.Hide();
+        this.MainLabel.Show();
+        this.MainLabel.Text = prob.Tag!.ToString();
+    }
+
     private void Prob_Click(object? sender, EventArgs e)
     {
         if (sender is not Label prob) return;
         prob.Text = string.IsNullOrEmpty(prob.Text) ? prob.Tag!.ToString() : string.Empty;
+    }
+
+    private void MainLabel_DoubleClick(object sender, EventArgs e)
+    {
+        this.MainLabel.Hide();
+        this.MainProbsPanel.Show();
+        this.MainLabel.Text = string.Empty;
     }
 }
