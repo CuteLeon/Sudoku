@@ -37,7 +37,6 @@ partial class Cell
         // 
         this.MainProbsPanel.ColumnCount = 1;
         this.MainProbsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        this.MainProbsPanel.Controls.Add(this.MainLabel, 0, 0);
         this.MainProbsPanel.Dock = DockStyle.Fill;
         this.MainProbsPanel.Location = new Point(0, 0);
         this.MainProbsPanel.Name = "MainProbsPanel";
@@ -49,7 +48,7 @@ partial class Cell
         // MainLabel
         // 
         this.MainLabel.Dock = DockStyle.Fill;
-        this.MainLabel.Font = new Font("Segoe UI", 36F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        this.MainLabel.Font = new Font("Segoe UI", 28F, FontStyle.Bold, GraphicsUnit.Point, 0);
         this.MainLabel.Location = new Point(3, 0);
         this.MainLabel.Name = "MainLabel";
         this.MainLabel.Size = new Size(144, 150);
@@ -61,6 +60,7 @@ partial class Cell
         this.AutoScaleDimensions = new SizeF(8F, 20F);
         this.AutoScaleMode = AutoScaleMode.Font;
         this.Controls.Add(this.MainProbsPanel);
+        this.Controls.Add(this.MainLabel);
         this.Name = "Cell";
         this.MainProbsPanel.ResumeLayout(false);
         this.ResumeLayout(false);
