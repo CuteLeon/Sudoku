@@ -34,9 +34,11 @@ partial class MainForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(640, 360);
-        Margin = new Padding(2, 2, 2, 2);
+        ClientSize = new Size(600, 600);
+        DoubleBuffered = true;
+        Margin = new Padding(2);
         Name = "MainForm";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Sudoku";
         ResumeLayout(false);
     }
