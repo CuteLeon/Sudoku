@@ -21,4 +21,6 @@ public class CellEntity
     public int CellColumn { get; set; }
 
     public int? Number { get; set; }
+
+    public HashSet<int> ProbableSet { get; init; } = [];
 }
