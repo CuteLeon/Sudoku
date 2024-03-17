@@ -1,4 +1,6 @@
-﻿namespace Sudoku;
+﻿using System.Diagnostics;
+
+namespace Sudoku;
 
 public partial class Board : UserControl
 {
@@ -8,35 +10,65 @@ public partial class Board : UserControl
         InitializeComponent();
         this.DoubleBuffered = true;
 
-        this.MainBoxesPanel.RowStyles.Clear();
-        this.MainBoxesPanel.RowCount = 0;
-        this.MainBoxesPanel.ColumnStyles.Clear();
-        this.MainBoxesPanel.ColumnCount = 0;
+        var size = Contracts.Size;
+        this.CreateBoxes(this.MainBoxesPanel, size);
+    }
 
-        var boxRowCount = Contracts.Size;
-        var rowPercent = 1.0f / boxRowCount;
-        for (int i = 0; i < boxRowCount; i++)
-            this.MainBoxesPanel.RowStyles.Add(new RowStyle(SizeType.Percent, rowPercent));
-        this.MainBoxesPanel.RowCount = boxRowCount;
-
-        var boxColumnCount = Contracts.Size;
-        var columnPercent = 1.0f / boxColumnCount;
-        for (int i = 0; i < boxColumnCount; i++)
-            this.MainBoxesPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, columnPercent));
-        this.MainBoxesPanel.ColumnCount = boxColumnCount;
-
-        this.MainBoxesPanel.Controls.Clear();
-        for (int x = 0; x < boxColumnCount; x++)
+    private void CreateBoxes(TableLayoutPanel boxesPanel, int size)
+    {
+        var boxPercent = 1.0f / size;
+        boxesPanel.RowStyles.Clear();
+        boxesPanel.ColumnStyles.Clear();
+        for (int i = 0; i < size; i++)
         {
-            for (int y = 0; y < boxRowCount; y++)
+            boxesPanel.RowStyles.Add(new RowStyle(SizeType.Percent, boxPercent));
+            boxesPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, boxPercent));
+        }
+        boxesPanel.RowCount = size;
+        boxesPanel.ColumnCount = size;
+        boxesPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
+
+        for (int boxX = 0; boxX < size; boxX++)
+        {
+            for (int boxY = 0; boxY < size; boxY++)
             {
-                var box = new Box()
+                var cellsPanel = new TableLayoutPanel()
                 {
                     Margin = Padding.Empty,
-                    Dock = DockStyle.Fill
+                    Dock = DockStyle.Fill,
+                    CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 };
-                this.MainBoxesPanel.Controls.Add(box);
-                this.MainBoxesPanel.SetCellPosition(box, new TableLayoutPanelCellPosition(x, y));
+                this.CreateCells(cellsPanel, size);
+                boxesPanel.Controls.Add(cellsPanel);
+                boxesPanel.SetCellPosition(cellsPanel, new TableLayoutPanelCellPosition(boxX, boxY));
+            }
+        }
+    }
+
+    private void CreateCells(TableLayoutPanel cellsPanel, int size)
+    {
+        var cellPercent = 1.0f / size;
+        cellsPanel.RowStyles.Clear();
+        cellsPanel.ColumnStyles.Clear();
+        for (int i = 0; i < size; i++)
+        {
+            cellsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, cellPercent));
+            cellsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, cellPercent));
+        }
+        cellsPanel.RowCount = size;
+        cellsPanel.ColumnCount = size;
+
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                var cell = new Cell()
+                {
+                    Margin = Padding.Empty,
+                    Dock = DockStyle.Fill,
+                };
+                cellsPanel.Controls.Add(cell);
+                cellsPanel.SetCellPosition(cell, new TableLayoutPanelCellPosition(x, y));
             }
         }
     }

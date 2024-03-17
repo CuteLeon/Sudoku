@@ -42,6 +42,7 @@ partial class MainForm
         // 
         // MainBoard
         // 
+        this.MainBoard.BackColor = Color.White;
         this.MainBoard.Dock = DockStyle.Fill;
         this.MainBoard.Location = new Point(0, 25);
         this.MainBoard.Name = "MainBoard";
@@ -56,6 +57,7 @@ partial class MainForm
         this.Controls.Add(this.MainBoard);
         this.Controls.Add(this.MainToolStrip);
         this.DoubleBuffered = true;
+        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
         this.Margin = new Padding(2);
         this.Name = "MainForm";
         this.StartPosition = FormStartPosition.CenterScreen;
