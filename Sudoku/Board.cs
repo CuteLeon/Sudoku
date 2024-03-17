@@ -13,13 +13,13 @@ public partial class Board : UserControl
         this.MainBoxesPanel.ColumnStyles.Clear();
         this.MainBoxesPanel.ColumnCount = 0;
 
-        var boxRowCount = Contracts.BoxRowCount;
+        var boxRowCount = Contracts.Size;
         var rowPercent = 1.0f / boxRowCount;
         for (int i = 0; i < boxRowCount; i++)
             this.MainBoxesPanel.RowStyles.Add(new RowStyle(SizeType.Percent, rowPercent));
         this.MainBoxesPanel.RowCount = boxRowCount;
 
-        var boxColumnCount = Contracts.BoxColumnCount;
+        var boxColumnCount = Contracts.Size;
         var columnPercent = 1.0f / boxColumnCount;
         for (int i = 0; i < boxColumnCount; i++)
             this.MainBoxesPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, columnPercent));

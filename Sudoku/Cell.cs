@@ -50,13 +50,13 @@ public partial class Cell : UserControl
         this.MainProbsPanel.ColumnStyles.Clear();
         this.MainProbsPanel.ColumnCount = 0;
 
-        var cellRowCount = Contracts.CellRowCount;
+        var cellRowCount = Contracts.Size;
         var rowPercent = 1.0f / cellRowCount;
         for (int i = 0; i < cellRowCount; i++)
             this.MainProbsPanel.RowStyles.Add(new RowStyle(SizeType.Percent, rowPercent));
         this.MainProbsPanel.RowCount = cellRowCount;
 
-        var cellColumnCount = Contracts.CellColumnCount;
+        var cellColumnCount = Contracts.Size;
         var columnPercent = 1.0f / cellColumnCount;
         for (int i = 0; i < cellColumnCount; i++)
             this.MainProbsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, columnPercent));
