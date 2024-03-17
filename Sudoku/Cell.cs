@@ -1,44 +1,24 @@
-﻿namespace Sudoku;
+﻿using System.Collections.Frozen;
+
+namespace Sudoku;
 
 public partial class Cell : UserControl
 {
-    private int? confirmedNumber;
-    private int realNumber;
-    private bool numberMatched;
+    private int? number;
 
-    public int RealNumber
+    public int? Number
     {
-        get => realNumber;
+        get => number;
         set
         {
-            realNumber = value;
-            this.NumberMatched = this.ConfirmedNumber.HasValue && this.ConfirmedNumber.Value == value;
-        }
-    }
-
-    public int? ConfirmedNumber
-    {
-        get => confirmedNumber;
-        set
-        {
-            confirmedNumber = value;
+            number = value;
             this.MainProbsPanel.Visible = !value.HasValue;
             this.MainLabel.Visible = value.HasValue;
             this.MainLabel.Text = value.ToString();
-            this.NumberMatched = value.HasValue && value.Value == this.RealNumber;
         }
     }
 
-    public bool NumberMatched
-    {
-        get => numberMatched;
-        set
-        {
-            numberMatched = value;
-            this.BackColor = this.ConfirmedNumber.HasValue && this.ConfirmedNumber.Value != this.RealNumber ?
-                Color.Red : Color.Transparent;
-        }
-    }
+    protected FrozenDictionary<int, Prob> ProbableDictionary { get; init; }
 
     public Cell()
     {
@@ -80,6 +60,13 @@ public partial class Cell : UserControl
                 this.MainProbsPanel.SetCellPosition(prob, new TableLayoutPanelCellPosition(x, y));
             }
         }
+        this.ProbableDictionary = this.MainProbsPanel.Controls.OfType<Prob>().ToFrozenDictionary(x => x.Number);
+    }
+
+    public void UpdateProbable(int number, bool state)
+    {
+        if (!this.ProbableDictionary.TryGetValue(number, out var prob)) return;
+        prob.Toggle = state;
     }
 
     private void Prob_MouseUp(object? sender, MouseEventArgs e)
@@ -91,7 +78,7 @@ public partial class Cell : UserControl
         }
         else if (e.Button == MouseButtons.Right)
         {
-            this.ConfirmedNumber = prob.Number;
+            this.Number = prob.Number;
         }
     }
 
@@ -99,7 +86,7 @@ public partial class Cell : UserControl
     {
         if (e.Button == MouseButtons.Right)
         {
-            this.ConfirmedNumber = default;
+            this.Number = default;
         }
     }
 }

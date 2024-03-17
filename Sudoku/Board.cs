@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Sudoku;
+﻿namespace Sudoku;
 
 public partial class Board : UserControl
 {
