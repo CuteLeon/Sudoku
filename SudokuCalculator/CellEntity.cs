@@ -1,27 +1,35 @@
 ﻿namespace SudokuCalculator;
 
-public struct CellLocation
+public struct Location
 {
-    public int BoxRow;
-    public int BoxColumn;
-    public int CellRow;
-    public int CellColumn;
+    public byte Row;
+    public byte Column;
 
-    public CellLocation(int boxRow, int boxColumn, int cellRow, int cellColumn)
+    public Location(byte row, byte column)
     {
-        this.BoxRow = boxRow;
-        this.BoxColumn = boxColumn;
-        this.CellRow = cellRow;
-        this.CellColumn = cellColumn;
+        this.Row = row;
+        this.Column = column;
+    }
+}
+
+public struct BoxCellLocation
+{
+    public Location BoxLocation;
+    public Location CellLocation;
+
+    public BoxCellLocation(Location boxLocation, Location cellLocation)
+    {
+        this.BoxLocation = boxLocation;
+        this.CellLocation = cellLocation;
     }
 
     public override string ToString()
     {
-        return $"[{this.BoxRow}, {this.BoxColumn}] [{this.CellRow}, {this.CellColumn}]";
+        return $"[{this.BoxLocation.Row}, {this.BoxLocation.Column}] [{this.CellLocation.Row}, {this.CellLocation.Column}]";
     }
 }
 
-public record CellEntity(CellLocation Location)
+public record CellEntity(BoxCellLocation Location)
 {
     public int? Number { get; set; }
 

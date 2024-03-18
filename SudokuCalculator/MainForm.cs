@@ -6,8 +6,8 @@ public partial class MainForm : Form
 {
     private Label? selectedCellLabel;
 
-    protected FrozenDictionary<CellLocation, Label> BoxCellLabels { get; init; }
-    protected FrozenDictionary<CellLocation, CellEntity> BoxCellEntities { get; init; }
+    protected FrozenDictionary<BoxCellLocation, Label> BoxCellLabels { get; init; }
+    protected FrozenDictionary<BoxCellLocation, CellEntity> BoxCellEntities { get; init; }
     protected SudokuCalculator SudokuCalculator { get; init; } = new();
     protected Label? SelectedCellLabel
     {
@@ -33,14 +33,15 @@ public partial class MainForm : Form
         this.Height = 300 + offsetHeight;
 
         var size = 3;
-        var boxCellLabels = new Dictionary<CellLocation, Label>();
-        var boxCellEntities = new Dictionary<CellLocation, CellEntity>();
+        var boxCellLabels = new Dictionary<BoxCellLocation, Label>();
+        var boxCellEntities = new Dictionary<BoxCellLocation, CellEntity>();
         var cellFont = new Font(this.Font.FontFamily, 12, FontStyle.Bold);
         this.BoardLayoutPanel.SuspendLayout();
-        for (int boxRow = 0; boxRow < size; boxRow++)
+        for (byte boxRow = 0; boxRow < size; boxRow++)
         {
-            for (int boxColumn = 0; boxColumn < size; boxColumn++)
+            for (byte boxColumn = 0; boxColumn < size; boxColumn++)
             {
+                var boxLocation = new Location(boxRow, boxColumn);
                 var boxIndex = boxRow * size + boxColumn;
                 var boxPanel = new TableLayoutPanel()
                 {
@@ -61,11 +62,12 @@ public partial class MainForm : Form
                     boxPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1.0f / size));
                 boxPanel.RowCount = size;
                 boxPanel.ColumnCount = size;
-                for (int cellRow = 0; cellRow < size; cellRow++)
+                for (byte cellRow = 0; cellRow < size; cellRow++)
                 {
-                    for (int cellColumn = 0; cellColumn < size; cellColumn++)
+                    for (byte cellColumn = 0; cellColumn < size; cellColumn++)
                     {
-                        var cellLocation = new CellLocation(boxRow, boxColumn, cellRow, cellColumn);
+                        var cellLocation = new Location(cellRow, cellColumn);
+                        var boxCellLocation = new BoxCellLocation(boxLocation, cellLocation);
                         var cellIndex = cellRow * size + cellColumn;
                         var cellLabel = new Label()
                         {
@@ -78,12 +80,12 @@ public partial class MainForm : Form
                             Tag = cellLocation
                         };
                         cellLabel.MouseUp += this.CellLabel_MouseUp;
-                        boxCellLabels[cellLocation] = cellLabel;
+                        boxCellLabels[boxCellLocation] = cellLabel;
                         boxPanel.Controls.Add(cellLabel);
                         boxPanel.SetCellPosition(cellLabel, new TableLayoutPanelCellPosition(cellColumn, cellRow));
 
-                        var cellEntity = new CellEntity(cellLocation);
-                        boxCellEntities[cellLocation] = cellEntity;
+                        var cellEntity = new CellEntity(boxCellLocation);
+                        boxCellEntities[boxCellLocation] = cellEntity;
                     }
                 }
                 boxPanel.ResumeLayout(true);
@@ -120,7 +122,7 @@ public partial class MainForm : Form
     {
         if (SelectedCellLabel is null ||
             e.ClickedItem?.Tag is not int targetNumber ||
-            SelectedCellLabel.Tag is not CellLocation cellLocation ||
+            SelectedCellLabel.Tag is not BoxCellLocation cellLocation ||
             !BoxCellEntities.TryGetValue(cellLocation, out var cellEntity)) return;
         SelectedCellLabel.Text = targetNumber.ToString();
         cellEntity.Number = targetNumber;

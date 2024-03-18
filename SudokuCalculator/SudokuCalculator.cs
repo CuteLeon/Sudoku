@@ -4,13 +4,13 @@ namespace SudokuCalculator;
 
 public class SudokuCalculator
 {
-    public void Calculate(FrozenDictionary<CellLocation, CellEntity> cells)
+    public void Calculate(FrozenDictionary<BoxCellLocation, CellEntity> cells)
     {
         var size = 3;
         this.CalculateProbableSet(cells, size);
     }
 
-    protected void CalculateProbableSet(FrozenDictionary<CellLocation, CellEntity> cells, int size)
+    protected void CalculateProbableSet(FrozenDictionary<BoxCellLocation, CellEntity> cells, int size)
     {
         foreach (var pair in cells)
         {
