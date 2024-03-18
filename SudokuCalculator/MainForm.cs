@@ -115,7 +115,7 @@ public partial class MainForm : Form
 
         if (e.Button == MouseButtons.Left)
         {
-            this.SelectedBoxCellLocation = boxCellLocation.Equals(this.SelectedBoxCellLocation) ? default : boxCellLocation;
+            this.SelectedBoxCellLocation = boxCellLocation.Equals(this.SelectedBoxCellLocation) ? default(BoxCellLocation?) : boxCellLocation;
         }
         else if (e.Button == MouseButtons.Right)
         {
@@ -170,7 +170,30 @@ public partial class MainForm : Form
 
     private void LoadStripButton_Click(object sender, EventArgs e)
     {
+        try
+        {
+            using var openFileDialog = new OpenFileDialog()
+            {
+            };
+            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
 
+            var size = 3;
+            var filePath = openFileDialog.FileName;
+            var lines = File.ReadAllLines(filePath);
+
+            if (lines.Length != size * size) throw new FileFormatException($"File lines count [{lines.Length}] invalid.");
+            var invalidLines = lines.Select((line, index) => (line, index)).Where(tuple => tuple.line.Length != size * size).ToArray();
+            if (invalidLines.Any())
+                throw new FileFormatException($"Line's length invalid:\n\t{string.Join("\n\t", invalidLines.Select(tuple => $"[{tuple.index}], Length={tuple.line.Length}"))}");
+
+            var elements = lines.SelectMany(element => element.Split(",")).ToArray();
+            var numbers = elements.Chunk(size * size).ToArray();
+
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void ClearStripButton_Click(object sender, EventArgs e)
