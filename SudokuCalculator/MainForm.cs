@@ -140,6 +140,13 @@ public partial class MainForm : Form
         }
     }
 
+    private void SetCellNumber(BoxCellLocation boxCellLocation, int number)
+    {
+        if (!BoxCellEntities.TryGetValue(boxCellLocation, out var boxCellEntity)) return;
+
+        boxCellEntity.Number = number;
+    }
+
     private void RefreshCells()
     {
         foreach (var pair in BoxCellEntities)
