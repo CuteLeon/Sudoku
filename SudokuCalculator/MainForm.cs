@@ -186,6 +186,8 @@ public partial class MainForm : Form
     {
         try
         {
+            this.ClearCells();
+
             using var openFileDialog = new OpenFileDialog()
             {
             };
@@ -220,6 +222,11 @@ public partial class MainForm : Form
     }
 
     private void ClearStripButton_Click(object sender, EventArgs e)
+    {
+        this.ClearCells();
+    }
+
+    private void ClearCells()
     {
         this.SelectedBoxCellLocation = default(BoxCellLocation?);
         foreach (var cellEntity in BoxCellEntities.Values)
