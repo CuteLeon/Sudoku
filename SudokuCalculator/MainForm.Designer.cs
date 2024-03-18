@@ -28,9 +28,11 @@ partial class MainForm
     /// </summary>
     private void InitializeComponent()
     {
+        this.components = new System.ComponentModel.Container();
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
         this.MainToolStrip = new ToolStrip();
         this.BoardLayoutPanel = new TableLayoutPanel();
+        this.CellContextMenuStrip = new ContextMenuStrip(this.components);
         this.SuspendLayout();
         // 
         // MainToolStrip
@@ -59,6 +61,11 @@ partial class MainForm
         this.BoardLayoutPanel.Size = new Size(300, 300);
         this.BoardLayoutPanel.TabIndex = 1;
         // 
+        // CellContextMenuStrip
+        // 
+        this.CellContextMenuStrip.Name = "CellContextMenuStrip";
+        this.CellContextMenuStrip.Size = new Size(181, 26);
+        // 
         // MainForm
         // 
         this.AutoScaleDimensions = new SizeF(7F, 15F);
@@ -79,4 +86,5 @@ partial class MainForm
 
     private ToolStrip MainToolStrip;
     private TableLayoutPanel BoardLayoutPanel;
+    private ContextMenuStrip CellContextMenuStrip;
 }

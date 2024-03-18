@@ -1,11 +1,27 @@
 using System.Collections.Frozen;
+using System.Diagnostics;
 
 namespace SudokuCalculator;
 
 public partial class MainForm : Form
 {
+    private Label? selectedCellLabel;
+
     public FrozenDictionary<(int, int), TableLayoutPanel> BoxPanels { get; init; }
     public FrozenDictionary<(int, int), FrozenDictionary<(int, int), Label>> BoxCellLabels { get; init; }
+    public Label? SelectedCellLabel
+    {
+        get => selectedCellLabel;
+        set
+        {
+            var previousCellLabel = selectedCellLabel;
+            selectedCellLabel = value;
+            if (previousCellLabel is not null)
+                previousCellLabel.BackColor = Color.Transparent;
+            if (selectedCellLabel is not null)
+                selectedCellLabel.BackColor = Color.LightGray;
+        }
+    }
 
     public MainForm()
     {
@@ -63,6 +79,7 @@ public partial class MainForm : Form
                             Dock = DockStyle.Fill,
                             Tag = (boxRow, boxColumn, cellRow, cellColumn)
                         };
+                        cellLabel.MouseUp += this.CellLabel_MouseUp;
                         cellLabels[(cellRow, cellColumn)] = cellLabel;
                         boxPanel.Controls.Add(cellLabel);
                         boxPanel.SetCellPosition(cellLabel, new TableLayoutPanelCellPosition(cellColumn, cellRow));
@@ -74,7 +91,33 @@ public partial class MainForm : Form
         }
         this.BoardLayoutPanel.ResumeLayout(true);
 
+        this.CellContextMenuStrip.Items.AddRange(Enumerable.Range(1, size * size).Select(menuIndex => new ToolStripMenuItem()
+        {
+            Text = menuIndex.ToString(),
+            Tag = menuIndex,
+        }).ToArray());
+        this.CellContextMenuStrip.ItemClicked += this.CellContextMenuStrip_ItemClicked;
         this.BoxPanels = boxPanels.ToFrozenDictionary();
         this.BoxCellLabels = boxCellLabels.ToFrozenDictionary(pair => pair.Key, pair => pair.Value.ToFrozenDictionary());
+    }
+
+    private void CellLabel_MouseUp(object? sender, MouseEventArgs e)
+    {
+        if (sender is not Label cellLabel) return;
+        if (e.Button == MouseButtons.Left)
+        {
+            this.SelectedCellLabel = this.SelectedCellLabel == cellLabel ? default : cellLabel;
+        }
+        else if (e.Button == MouseButtons.Right)
+        {
+            this.SelectedCellLabel = cellLabel;
+            this.CellContextMenuStrip.Show(cellLabel, e.X, e.Y);
+        }
+    }
+
+    private void CellContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
+    {
+        if (SelectedCellLabel is null) return;
+        SelectedCellLabel.Text = e.ClickedItem?.Tag?.ToString();
     }
 }
