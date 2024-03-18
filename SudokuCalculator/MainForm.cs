@@ -7,9 +7,10 @@ public partial class MainForm : Form
 {
     private Label? selectedCellLabel;
 
-    public FrozenDictionary<CellLocation, Label> BoxCellLabels { get; init; }
-    public FrozenDictionary<CellLocation, CellEntity> BoxCellEntities { get; init; }
-    public Label? SelectedCellLabel
+    protected FrozenDictionary<CellLocation, Label> BoxCellLabels { get; init; }
+    protected FrozenDictionary<CellLocation, CellEntity> BoxCellEntities { get; init; }
+    protected SudokuCalculator SudokuCalculator { get; init; } = new();
+    protected Label? SelectedCellLabel
     {
         get => selectedCellLabel;
         set
@@ -152,5 +153,7 @@ public partial class MainForm : Form
 
     private void CalculateStripButton_Click(object sender, EventArgs e)
     {
+        this.SudokuCalculator.Calculate(BoxCellEntities);
+        this.RefreshCells();
     }
 }
