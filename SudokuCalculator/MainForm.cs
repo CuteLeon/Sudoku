@@ -126,7 +126,7 @@ public partial class MainForm : Form
         cellEntity.Number = targetNumber;
     }
 
-    private void RefreshCell()
+    private void RefreshCells()
     {
         foreach (var pair in BoxCellEntities)
         {
@@ -142,6 +142,15 @@ public partial class MainForm : Form
             cellEntity.Number = default;
             cellEntity.ProbableSet.Clear();
         }
-        this.RefreshCell();
+        this.RefreshCells();
+    }
+
+    private void RefreshStripButton_Click(object sender, EventArgs e)
+    {
+        this.RefreshCells();
+    }
+
+    private void CalculateStripButton_Click(object sender, EventArgs e)
+    {
     }
 }

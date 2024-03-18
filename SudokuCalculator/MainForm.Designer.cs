@@ -79,6 +79,7 @@ partial class MainForm
         this.ClearStripButton.Name = "ClearStripButton";
         this.ClearStripButton.Size = new Size(38, 22);
         this.ClearStripButton.Text = "Clear";
+        this.ClearStripButton.Click += this.ClearStripButton_Click;
         // 
         // RefreshStripButton
         // 
@@ -88,6 +89,7 @@ partial class MainForm
         this.RefreshStripButton.Name = "RefreshStripButton";
         this.RefreshStripButton.Size = new Size(50, 22);
         this.RefreshStripButton.Text = "Refresh";
+        this.RefreshStripButton.Click += this.RefreshStripButton_Click;
         // 
         // CalculateStripButton
         // 
@@ -97,6 +99,7 @@ partial class MainForm
         this.CalculateStripButton.Name = "CalculateStripButton";
         this.CalculateStripButton.Size = new Size(60, 22);
         this.CalculateStripButton.Text = "Calculate";
+        this.CalculateStripButton.Click += this.CalculateStripButton_Click;
         // 
         // CalculateStripSeparator
         // 
