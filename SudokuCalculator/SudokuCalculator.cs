@@ -19,6 +19,8 @@ public class SudokuCalculator
                 var cellEntity = detectedPair.Value;
                 var boxLocation = detectedPair.Key.BoxLocation;
                 var cellLocation = detectedPair.Key.CellLocation;
+                if (cellEntity.ProbableSet.Count != 1) continue;
+
                 var number = cellEntity.ProbableSet.Single();
                 cellEntity.Number = number;
                 cellEntity.ProbableSet.Clear();
