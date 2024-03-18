@@ -30,21 +30,43 @@ partial class MainForm
     {
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
         this.MainToolStrip = new ToolStrip();
+        this.BoardLayoutPanel = new TableLayoutPanel();
         this.SuspendLayout();
         // 
         // MainToolStrip
         // 
         this.MainToolStrip.Location = new Point(0, 0);
         this.MainToolStrip.Name = "MainToolStrip";
-        this.MainToolStrip.Size = new Size(525, 25);
+        this.MainToolStrip.Size = new Size(300, 25);
         this.MainToolStrip.TabIndex = 0;
+        // 
+        // BoardLayoutPanel
+        // 
+        this.BoardLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
+        this.BoardLayoutPanel.ColumnCount = 3;
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+        this.BoardLayoutPanel.Dock = DockStyle.Fill;
+        this.BoardLayoutPanel.Location = new Point(0, 25);
+        this.BoardLayoutPanel.Margin = new Padding(0);
+        this.BoardLayoutPanel.Name = "BoardLayoutPanel";
+        this.BoardLayoutPanel.RowCount = 3;
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        this.BoardLayoutPanel.Size = new Size(300, 300);
+        this.BoardLayoutPanel.TabIndex = 1;
         // 
         // MainForm
         // 
         this.AutoScaleDimensions = new SizeF(7F, 15F);
         this.AutoScaleMode = AutoScaleMode.Font;
-        this.ClientSize = new Size(525, 469);
+        this.ClientSize = new Size(300, 325);
+        this.Controls.Add(this.BoardLayoutPanel);
         this.Controls.Add(this.MainToolStrip);
+        this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
         this.Icon = (Icon)resources.GetObject("$this.Icon");
         this.Name = "MainForm";
         this.StartPosition = FormStartPosition.CenterScreen;
@@ -56,4 +78,5 @@ partial class MainForm
     #endregion
 
     private ToolStrip MainToolStrip;
+    private TableLayoutPanel BoardLayoutPanel;
 }
