@@ -4,6 +4,9 @@ namespace SudokuCalculator;
 
 public partial class MainForm : Form
 {
+    protected static Font ConfirmedFont = new Font(SystemFonts.DialogFont.FontFamily, 12, FontStyle.Bold);
+    protected static Font ProbableFont = new Font(SystemFonts.DialogFont.FontFamily, 4, FontStyle.Regular);
+
     private Label? selectedCellLabel;
 
     protected FrozenDictionary<BoxCellLocation, Label> BoxCellLabels { get; init; }
@@ -35,7 +38,6 @@ public partial class MainForm : Form
         var size = 3;
         var boxCellLabels = new Dictionary<BoxCellLocation, Label>();
         var boxCellEntities = new Dictionary<BoxCellLocation, CellEntity>();
-        var cellFont = new Font(this.Font.FontFamily, 12, FontStyle.Bold);
         this.BoardLayoutPanel.SuspendLayout();
         for (byte boxRow = 0; boxRow < size; boxRow++)
         {
@@ -73,7 +75,6 @@ public partial class MainForm : Form
                         {
                             Name = $"Cell_{boxIndex}_{cellIndex}",
                             Margin = Padding.Empty,
-                            Font = cellFont,
                             TextAlign = ContentAlignment.MiddleCenter,
                             AutoSize = false,
                             Dock = DockStyle.Fill,
@@ -93,6 +94,7 @@ public partial class MainForm : Form
         }
         this.BoardLayoutPanel.ResumeLayout(true);
 
+        this.CellContextMenuStrip.Items.Add(new ToolStripMenuItem() { Text = "Reset", Tag = 0 });
         this.CellContextMenuStrip.Items.AddRange(Enumerable.Range(1, size * size).Select(menuIndex => new ToolStripMenuItem()
         {
             Text = menuIndex.ToString(),
@@ -124,8 +126,18 @@ public partial class MainForm : Form
             e.ClickedItem?.Tag is not int targetNumber ||
             SelectedCellLabel.Tag is not BoxCellLocation cellLocation ||
             !BoxCellEntities.TryGetValue(cellLocation, out var cellEntity)) return;
-        SelectedCellLabel.Text = targetNumber.ToString();
-        cellEntity.Number = targetNumber;
+        if (targetNumber == 0)
+        {
+            SelectedCellLabel.Font = ProbableFont;
+            SelectedCellLabel.Text = string.Empty;
+            cellEntity.Number = default;
+        }
+        else
+        {
+            SelectedCellLabel.Font = ConfirmedFont;
+            SelectedCellLabel.Text = targetNumber.ToString();
+            cellEntity.Number = targetNumber;
+        }
     }
 
     private void RefreshCells()
@@ -133,7 +145,16 @@ public partial class MainForm : Form
         foreach (var pair in BoxCellEntities)
         {
             if (!BoxCellLabels.TryGetValue(pair.Key, out var cellLabel)) return;
-            cellLabel.Text = pair.Value.Number.ToString();
+            if (pair.Value.Number.HasValue)
+            {
+                cellLabel.Font = ConfirmedFont;
+                cellLabel.Text = pair.Value.Number.ToString();
+            }
+            else
+            {
+                cellLabel.Font = ProbableFont;
+                cellLabel.Text = string.Join("", pair.Value.ProbableSet);
+            }
         }
     }
 
