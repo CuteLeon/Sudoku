@@ -77,7 +77,7 @@ public partial class MainForm : Form
                             TextAlign = ContentAlignment.MiddleCenter,
                             AutoSize = false,
                             Dock = DockStyle.Fill,
-                            Tag = cellLocation
+                            Tag = boxCellLocation
                         };
                         cellLabel.MouseUp += this.CellLabel_MouseUp;
                         boxCellLabels[boxCellLocation] = cellLabel;
