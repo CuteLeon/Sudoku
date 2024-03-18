@@ -52,17 +52,17 @@ partial class MainForm
         // 
         this.BoardLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
         this.BoardLayoutPanel.ColumnCount = 3;
-        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
-        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333333F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333333F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333334F));
         this.BoardLayoutPanel.Dock = DockStyle.Fill;
         this.BoardLayoutPanel.Location = new Point(0, 25);
         this.BoardLayoutPanel.Margin = new Padding(0);
         this.BoardLayoutPanel.Name = "BoardLayoutPanel";
         this.BoardLayoutPanel.RowCount = 3;
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333333F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333333F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333334F));
         this.BoardLayoutPanel.Size = new Size(300, 300);
         this.BoardLayoutPanel.TabIndex = 1;
         // 
