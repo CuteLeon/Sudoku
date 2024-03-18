@@ -31,45 +31,24 @@ partial class MainForm
         this.components = new System.ComponentModel.Container();
         System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
         this.MainToolStrip = new ToolStrip();
-        this.BoardLayoutPanel = new TableLayoutPanel();
-        this.CellContextMenuStrip = new ContextMenuStrip(this.components);
         this.ClearStripButton = new ToolStripButton();
         this.RefreshStripButton = new ToolStripButton();
-        this.CalculateStripButton = new ToolStripButton();
         this.CalculateStripSeparator = new ToolStripSeparator();
+        this.CalculateStripButton = new ToolStripButton();
+        this.BoardLayoutPanel = new TableLayoutPanel();
+        this.CellContextMenuStrip = new ContextMenuStrip(this.components);
+        this.LoadStripButton = new ToolStripButton();
+        this.LoadStripSeparator = new ToolStripSeparator();
         this.MainToolStrip.SuspendLayout();
         this.SuspendLayout();
         // 
         // MainToolStrip
         // 
-        this.MainToolStrip.Items.AddRange(new ToolStripItem[] { this.ClearStripButton, this.RefreshStripButton, this.CalculateStripSeparator, this.CalculateStripButton });
+        this.MainToolStrip.Items.AddRange(new ToolStripItem[] { this.LoadStripButton, this.LoadStripSeparator, this.ClearStripButton, this.RefreshStripButton, this.CalculateStripSeparator, this.CalculateStripButton });
         this.MainToolStrip.Location = new Point(0, 0);
         this.MainToolStrip.Name = "MainToolStrip";
         this.MainToolStrip.Size = new Size(300, 25);
         this.MainToolStrip.TabIndex = 0;
-        // 
-        // BoardLayoutPanel
-        // 
-        this.BoardLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
-        this.BoardLayoutPanel.ColumnCount = 3;
-        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333333F));
-        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333333F));
-        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333334F));
-        this.BoardLayoutPanel.Dock = DockStyle.Fill;
-        this.BoardLayoutPanel.Location = new Point(0, 25);
-        this.BoardLayoutPanel.Margin = new Padding(0);
-        this.BoardLayoutPanel.Name = "BoardLayoutPanel";
-        this.BoardLayoutPanel.RowCount = 3;
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333333F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333333F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333334F));
-        this.BoardLayoutPanel.Size = new Size(300, 300);
-        this.BoardLayoutPanel.TabIndex = 1;
-        // 
-        // CellContextMenuStrip
-        // 
-        this.CellContextMenuStrip.Name = "CellContextMenuStrip";
-        this.CellContextMenuStrip.Size = new Size(61, 4);
         // 
         // ClearStripButton
         // 
@@ -91,6 +70,11 @@ partial class MainForm
         this.RefreshStripButton.Text = "Refresh";
         this.RefreshStripButton.Click += this.RefreshStripButton_Click;
         // 
+        // CalculateStripSeparator
+        // 
+        this.CalculateStripSeparator.Name = "CalculateStripSeparator";
+        this.CalculateStripSeparator.Size = new Size(6, 25);
+        // 
         // CalculateStripButton
         // 
         this.CalculateStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
@@ -101,10 +85,43 @@ partial class MainForm
         this.CalculateStripButton.Text = "Calculate";
         this.CalculateStripButton.Click += this.CalculateStripButton_Click;
         // 
-        // CalculateStripSeparator
+        // BoardLayoutPanel
         // 
-        this.CalculateStripSeparator.Name = "CalculateStripSeparator";
-        this.CalculateStripSeparator.Size = new Size(6, 25);
+        this.BoardLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
+        this.BoardLayoutPanel.ColumnCount = 3;
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.Dock = DockStyle.Fill;
+        this.BoardLayoutPanel.Location = new Point(0, 25);
+        this.BoardLayoutPanel.Margin = new Padding(0);
+        this.BoardLayoutPanel.Name = "BoardLayoutPanel";
+        this.BoardLayoutPanel.RowCount = 3;
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
+        this.BoardLayoutPanel.Size = new Size(300, 300);
+        this.BoardLayoutPanel.TabIndex = 1;
+        // 
+        // CellContextMenuStrip
+        // 
+        this.CellContextMenuStrip.Name = "CellContextMenuStrip";
+        this.CellContextMenuStrip.Size = new Size(61, 4);
+        // 
+        // LoadStripButton
+        // 
+        this.LoadStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+        this.LoadStripButton.Image = (Image)resources.GetObject("LoadStripButton.Image");
+        this.LoadStripButton.ImageTransparentColor = Color.Magenta;
+        this.LoadStripButton.Name = "LoadStripButton";
+        this.LoadStripButton.Size = new Size(37, 22);
+        this.LoadStripButton.Text = "Load";
+        this.LoadStripButton.Click += this.LoadStripButton_Click;
+        // 
+        // LoadStripSeparator
+        // 
+        this.LoadStripSeparator.Name = "LoadStripSeparator";
+        this.LoadStripSeparator.Size = new Size(6, 25);
         // 
         // MainForm
         // 
@@ -133,4 +150,6 @@ partial class MainForm
     private ToolStripButton RefreshStripButton;
     private ToolStripButton CalculateStripButton;
     private ToolStripSeparator CalculateStripSeparator;
+    private ToolStripButton LoadStripButton;
+    private ToolStripSeparator LoadStripSeparator;
 }

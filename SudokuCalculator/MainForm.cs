@@ -168,6 +168,11 @@ public partial class MainForm : Form
         }
     }
 
+    private void LoadStripButton_Click(object sender, EventArgs e)
+    {
+
+    }
+
     private void ClearStripButton_Click(object sender, EventArgs e)
     {
         foreach (var cellEntity in BoxCellEntities.Values)
