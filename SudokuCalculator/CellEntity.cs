@@ -10,6 +10,11 @@ public struct Location
         this.Row = row;
         this.Column = column;
     }
+
+    public override string ToString()
+    {
+        return $"[{this.Row}, {this.Column}]";
+    }
 }
 
 public struct BoxCellLocation
@@ -25,7 +30,7 @@ public struct BoxCellLocation
 
     public override string ToString()
     {
-        return $"[{this.BoxLocation.Row}, {this.BoxLocation.Column}] [{this.CellLocation.Row}, {this.CellLocation.Column}]";
+        return $"{this.BoxLocation} {this.CellLocation}";
     }
 }
 

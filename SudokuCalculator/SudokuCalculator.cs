@@ -27,17 +27,39 @@ public class SudokuCalculator
                 var rowBoxLocation = new Location(boxLocation.Row, boxIndex);
                 var columnBoxLocation = new Location(boxIndex, boxLocation.Column);
 
-                for (byte cellIndex = 0; cellIndex < size; cellIndex++)
+                if (!rowBoxLocation.Equals(boxLocation))
                 {
-                    var rowCellLocation = new Location(cellLocation.Row, cellIndex);
-                    var columnCellLocation = new Location(cellIndex, cellLocation.Column);
-                    var rowBoxCellLocation = new BoxCellLocation(rowBoxLocation, rowCellLocation);
-                    var columnBoxCellLocation = new BoxCellLocation(columnBoxLocation, columnCellLocation);
+                    for (byte cellIndex = 0; cellIndex < size; cellIndex++)
+                    {
+                        var rowCellLocation = new Location(cellLocation.Row, cellIndex);
+                        var rowBoxCellLocation = new BoxCellLocation(rowBoxLocation, rowCellLocation);
 
-                    if (cells.TryGetValue(rowBoxCellLocation, out var rowCellEntity) && rowCellEntity.Number.HasValue)
-                        probableSet.Remove(rowCellEntity.Number.Value);
-                    if (cells.TryGetValue(columnBoxCellLocation, out var columnCellEntity) && columnCellEntity.Number.HasValue)
-                        probableSet.Remove(columnCellEntity.Number.Value);
+                        if (cells.TryGetValue(rowBoxCellLocation, out var rowCellEntity) && rowCellEntity.Number.HasValue)
+                            probableSet.Remove(rowCellEntity.Number.Value);
+                    }
+                }
+                if (!columnBoxLocation.Equals(boxLocation))
+                {
+                    for (byte cellIndex = 0; cellIndex < size; cellIndex++)
+                    {
+                        var columnCellLocation = new Location(cellIndex, cellLocation.Column);
+                        var columnBoxCellLocation = new BoxCellLocation(columnBoxLocation, columnCellLocation);
+
+                        if (cells.TryGetValue(columnBoxCellLocation, out var columnCellEntity) && columnCellEntity.Number.HasValue)
+                            probableSet.Remove(columnCellEntity.Number.Value);
+                    }
+                }
+                else
+                {
+                    for (byte cellRow = 0; cellRow < size; cellRow++)
+                    {
+                        for (byte cellColumn = 0; cellColumn < size; cellColumn++)
+                        {
+                            var currentBoxCellLocation = new BoxCellLocation(boxLocation, new Location(cellRow, cellColumn));
+                            if (cells.TryGetValue(currentBoxCellLocation, out var currentCellEntity) && currentCellEntity.Number.HasValue)
+                                probableSet.Remove(currentCellEntity.Number.Value);
+                        }
+                    }
                 }
             }
 
