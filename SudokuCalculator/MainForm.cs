@@ -5,7 +5,7 @@ namespace SudokuCalculator;
 public partial class MainForm : Form
 {
     protected static Font ConfirmedFont = new Font(SystemFonts.DialogFont.FontFamily, 12, FontStyle.Bold);
-    protected static Font ProbableFont = new Font(SystemFonts.DialogFont.FontFamily, 4, FontStyle.Regular);
+    protected static Font ProbableFont = new Font(SystemFonts.DialogFont.FontFamily, 8, FontStyle.Regular);
 
     private Label? selectedCellLabel;
 
