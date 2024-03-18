@@ -7,22 +7,24 @@ public partial class MainForm : Form
     protected static Font ConfirmedFont = new Font(SystemFonts.DialogFont.FontFamily, 12, FontStyle.Bold);
     protected static Font ProbableFont = new Font(SystemFonts.DialogFont.FontFamily, 8, FontStyle.Regular);
 
-    private Label? selectedCellLabel;
+    private BoxCellLocation? selectedBoxCellLocation;
 
     protected FrozenDictionary<BoxCellLocation, Label> BoxCellLabels { get; init; }
     protected FrozenDictionary<BoxCellLocation, CellEntity> BoxCellEntities { get; init; }
     protected SudokuCalculator SudokuCalculator { get; init; } = new();
-    protected Label? SelectedCellLabel
+    protected BoxCellLocation? SelectedBoxCellLocation
     {
-        get => selectedCellLabel;
+        get => selectedBoxCellLocation;
         set
         {
-            var previousCellLabel = selectedCellLabel;
-            selectedCellLabel = value;
-            if (previousCellLabel is not null)
-                previousCellLabel.BackColor = Color.Transparent;
-            if (selectedCellLabel is not null)
-                selectedCellLabel.BackColor = Color.LightGray;
+            var previousBoxCellLocation = selectedBoxCellLocation;
+            selectedBoxCellLocation = value;
+            if (previousBoxCellLocation is not null &&
+                BoxCellLabels.TryGetValue(previousBoxCellLocation.Value, out var previousBoxCellLabel))
+                previousBoxCellLabel.BackColor = Color.Transparent;
+            if (selectedBoxCellLocation is not null &&
+                BoxCellLabels.TryGetValue(selectedBoxCellLocation.Value, out var selectedBoxCellLabel))
+                selectedBoxCellLabel.BackColor = Color.LightGray;
         }
     }
 
@@ -108,42 +110,43 @@ public partial class MainForm : Form
 
     private void CellLabel_MouseUp(object? sender, MouseEventArgs e)
     {
-        if (sender is not Label cellLabel) return;
+        if (sender is not Label cellLabel ||
+            cellLabel.Tag is not BoxCellLocation boxCellLocation) return;
+
         if (e.Button == MouseButtons.Left)
         {
-            this.SelectedCellLabel = this.SelectedCellLabel == cellLabel ? default : cellLabel;
+            this.SelectedBoxCellLocation = boxCellLocation.Equals(this.SelectedBoxCellLocation) ? default : boxCellLocation;
         }
         else if (e.Button == MouseButtons.Right)
         {
-            this.SelectedCellLabel = cellLabel;
+            this.SelectedBoxCellLocation = boxCellLocation;
             this.CellContextMenuStrip.Show(cellLabel, e.X, e.Y);
         }
     }
 
     private void CellContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
     {
-        if (SelectedCellLabel is null ||
+        if (SelectedBoxCellLocation is null ||
             e.ClickedItem?.Tag is not int targetNumber ||
-            SelectedCellLabel.Tag is not BoxCellLocation cellLocation ||
-            !BoxCellEntities.TryGetValue(cellLocation, out var cellEntity)) return;
-        if (targetNumber == 0)
+            SelectedBoxCellLocation is null) return;
+
+        this.SetCellNumber(SelectedBoxCellLocation.Value, targetNumber);
+    }
+
+    private void SetCellNumber(BoxCellLocation boxCellLocation, int? number)
+    {
+        if (!BoxCellEntities.TryGetValue(boxCellLocation, out var boxCellEntity) ||
+            !BoxCellLabels.TryGetValue(boxCellLocation, out var boxCellLabel)) return;
+
+        if (number is null or 0)
         {
-            SelectedCellLabel.Font = ProbableFont;
-            SelectedCellLabel.Text = string.Empty;
-            cellEntity.Number = default;
+            boxCellLabel.Font = ProbableFont;
         }
         else
         {
-            SelectedCellLabel.Font = ConfirmedFont;
-            SelectedCellLabel.Text = targetNumber.ToString();
-            cellEntity.Number = targetNumber;
+            boxCellLabel.Font = ConfirmedFont;
         }
-    }
-
-    private void SetCellNumber(BoxCellLocation boxCellLocation, int number)
-    {
-        if (!BoxCellEntities.TryGetValue(boxCellLocation, out var boxCellEntity)) return;
-
+        boxCellLabel.Text = number.ToString();
         boxCellEntity.Number = number;
     }
 
