@@ -142,13 +142,15 @@ public partial class MainForm : Form
         if (number is null or 0)
         {
             boxCellLabel.Font = ProbableFont;
+            boxCellLabel.Text = string.Empty;
+            boxCellEntity.Number = default(int?);
         }
         else
         {
             boxCellLabel.Font = ConfirmedFont;
-        }
         boxCellLabel.Text = number.ToString();
         boxCellEntity.Number = number;
+    }
     }
 
     private void RefreshCells()
@@ -158,13 +160,24 @@ public partial class MainForm : Form
             if (!BoxCellLabels.TryGetValue(pair.Key, out var cellLabel)) return;
             if (pair.Value.Number.HasValue)
             {
+                var previousText = cellLabel.Text;
+                var newText = pair.Value.Number.ToString();
                 cellLabel.Font = ConfirmedFont;
-                cellLabel.Text = pair.Value.Number.ToString();
+                cellLabel.Text = newText;
+                if (!string.Equals(previousText, newText))
+                {
+                    cellLabel.BackColor = Color.SkyBlue;
+                }
+                else
+                {
+                    cellLabel.BackColor = Color.Transparent;
+                }
             }
             else
             {
                 cellLabel.Font = ProbableFont;
                 cellLabel.Text = string.Join("", pair.Value.ProbableSet);
+                cellLabel.BackColor = Color.Transparent;
             }
         }
     }
