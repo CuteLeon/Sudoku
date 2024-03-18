@@ -33,11 +33,16 @@ partial class MainForm
         this.MainToolStrip = new ToolStrip();
         this.BoardLayoutPanel = new TableLayoutPanel();
         this.CellContextMenuStrip = new ContextMenuStrip(this.components);
+        this.ClearStripButton = new ToolStripButton();
+        this.RefreshStripButton = new ToolStripButton();
+        this.CalculateStripButton = new ToolStripButton();
+        this.CalculateStripSeparator = new ToolStripSeparator();
         this.MainToolStrip.SuspendLayout();
         this.SuspendLayout();
         // 
         // MainToolStrip
         // 
+        this.MainToolStrip.Items.AddRange(new ToolStripItem[] { this.ClearStripButton, this.RefreshStripButton, this.CalculateStripSeparator, this.CalculateStripButton });
         this.MainToolStrip.Location = new Point(0, 0);
         this.MainToolStrip.Name = "MainToolStrip";
         this.MainToolStrip.Size = new Size(300, 25);
@@ -66,6 +71,38 @@ partial class MainForm
         this.CellContextMenuStrip.Name = "CellContextMenuStrip";
         this.CellContextMenuStrip.Size = new Size(61, 4);
         // 
+        // ClearStripButton
+        // 
+        this.ClearStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+        this.ClearStripButton.Image = (Image)resources.GetObject("ClearStripButton.Image");
+        this.ClearStripButton.ImageTransparentColor = Color.Magenta;
+        this.ClearStripButton.Name = "ClearStripButton";
+        this.ClearStripButton.Size = new Size(38, 22);
+        this.ClearStripButton.Text = "Clear";
+        // 
+        // RefreshStripButton
+        // 
+        this.RefreshStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+        this.RefreshStripButton.Image = (Image)resources.GetObject("RefreshStripButton.Image");
+        this.RefreshStripButton.ImageTransparentColor = Color.Magenta;
+        this.RefreshStripButton.Name = "RefreshStripButton";
+        this.RefreshStripButton.Size = new Size(50, 22);
+        this.RefreshStripButton.Text = "Refresh";
+        // 
+        // CalculateStripButton
+        // 
+        this.CalculateStripButton.DisplayStyle = ToolStripItemDisplayStyle.Text;
+        this.CalculateStripButton.Image = (Image)resources.GetObject("CalculateStripButton.Image");
+        this.CalculateStripButton.ImageTransparentColor = Color.Magenta;
+        this.CalculateStripButton.Name = "CalculateStripButton";
+        this.CalculateStripButton.Size = new Size(60, 22);
+        this.CalculateStripButton.Text = "Calculate";
+        // 
+        // CalculateStripSeparator
+        // 
+        this.CalculateStripSeparator.Name = "CalculateStripSeparator";
+        this.CalculateStripSeparator.Size = new Size(6, 25);
+        // 
         // MainForm
         // 
         this.AutoScaleDimensions = new SizeF(7F, 15F);
@@ -89,4 +126,8 @@ partial class MainForm
     private ToolStrip MainToolStrip;
     private TableLayoutPanel BoardLayoutPanel;
     private ContextMenuStrip CellContextMenuStrip;
+    private ToolStripButton ClearStripButton;
+    private ToolStripButton RefreshStripButton;
+    private ToolStripButton CalculateStripButton;
+    private ToolStripSeparator CalculateStripSeparator;
 }
