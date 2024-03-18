@@ -8,6 +8,38 @@ public class SudokuCalculator
     {
         byte size = 3;
         this.CalculateProbableSet(cells, size);
+
+        while (true)
+        {
+            var detectedPairs = cells.Where(pair => !pair.Value.Number.HasValue && pair.Value.ProbableSet.Count == 1).ToArray();
+            if (detectedPairs.Length == 0) break;
+
+            foreach (var detectedPair in detectedPairs)
+            {
+                var cellEntity = detectedPair.Value;
+                var boxLocation = detectedPair.Key.BoxLocation;
+                var cellLocation = detectedPair.Key.CellLocation;
+                var number = cellEntity.ProbableSet.Single();
+                cellEntity.Number = number;
+                cellEntity.ProbableSet.Clear();
+
+                foreach (var rowBoxCell in this.GetRowBoxCells(cells, boxLocation, cellLocation.Row, size))
+                {
+                    if (!rowBoxCell.Number.HasValue)
+                        rowBoxCell.ProbableSet.Remove(number);
+                }
+                foreach (var columnBoxCell in this.GetColumnBoxCells(cells, boxLocation, cellLocation.Column, size))
+                {
+                    if (!columnBoxCell.Number.HasValue)
+                        columnBoxCell.ProbableSet.Remove(number);
+                }
+                foreach (var currentBoxCell in this.GetCurrentBoxCells(cells, boxLocation, size))
+                {
+                    if (!currentBoxCell.Number.HasValue)
+                        currentBoxCell.ProbableSet.Remove(number);
+                }
+            }
+        }
     }
 
     public void CalculateProbableSet(FrozenDictionary<BoxCellLocation, CellEntity> cells, byte size)
@@ -63,7 +95,8 @@ public class SudokuCalculator
         }
     }
 
-    protected IEnumerable<CellEntity> GetColumnBoxCells(FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte cellColumn, byte size)
+    protected IEnumerable<CellEntity> GetColumnBoxCells(
+        FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte cellColumn, byte size)
     {
         for (byte boxIndex = 0; boxIndex < size; boxIndex++)
         {
@@ -82,7 +115,8 @@ public class SudokuCalculator
         }
     }
 
-    protected IEnumerable<CellEntity> GetCurrentBoxCells(FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte size)
+    protected IEnumerable<CellEntity> GetCurrentBoxCells(
+        FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte size)
     {
         for (byte cellRow = 0; cellRow < size; cellRow++)
         {
