@@ -126,6 +126,15 @@ public partial class MainForm : Form
         cellEntity.Number = targetNumber;
     }
 
+    private void RefreshCell()
+    {
+        foreach (var pair in BoxCellEntities)
+        {
+            if (!BoxCellLabels.TryGetValue(pair.Key, out var cellLabel)) return;
+            cellLabel.Text = pair.Value.Number.ToString();
+        }
+    }
+
     private void ClearStripButton_Click(object sender, EventArgs e)
     {
         foreach (var cellEntity in BoxCellEntities.Values)
@@ -133,5 +142,6 @@ public partial class MainForm : Form
             cellEntity.Number = default;
             cellEntity.ProbableSet.Clear();
         }
+        this.RefreshCell();
     }
 }
