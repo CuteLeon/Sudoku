@@ -1,4 +1,5 @@
 using System.Collections.Frozen;
+using System.Diagnostics;
 
 namespace SudokuCalculator;
 
@@ -186,9 +187,18 @@ public partial class MainForm : Form
             if (invalidLines.Any())
                 throw new FileFormatException($"Line's length invalid:\n\t{string.Join("\n\t", invalidLines.Select(tuple => $"[{tuple.index}], Length={tuple.line.Length}"))}");
 
-            var elements = lines.SelectMany(element => element.Split(",")).ToArray();
-            var numbers = elements.Chunk(size * size).ToArray();
-
+            foreach (var (line, lineIndex) in lines.Select((line, index) => (line, index)))
+            {
+                foreach (var (character, characterIndex) in line.AsEnumerable().Select((character, index) => (character, index)))
+                {
+                    var (boxRow, cellRow) = Math.DivRem(lineIndex, size);
+                    var (boxColumn, cellColumn) = Math.DivRem(characterIndex, size);
+                    var boxCellLocation = new BoxCellLocation(new Location((byte)boxRow, (byte)boxColumn), new Location((byte)cellRow, (byte)cellColumn));
+                    var numberString = character.ToString();
+                    var number = string.IsNullOrWhiteSpace(numberString) || !int.TryParse(numberString, out var parsedNumber) ? default(int?) : parsedNumber;
+                    this.SetCellNumber(boxCellLocation, number);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -198,6 +208,7 @@ public partial class MainForm : Form
 
     private void ClearStripButton_Click(object sender, EventArgs e)
     {
+        this.SelectedBoxCellLocation = default(BoxCellLocation?);
         foreach (var cellEntity in BoxCellEntities.Values)
         {
             cellEntity.Number = default;
