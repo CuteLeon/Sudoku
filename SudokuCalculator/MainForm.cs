@@ -7,8 +7,8 @@ public partial class MainForm : Form
 {
     private Label? selectedCellLabel;
 
-    public FrozenDictionary<(int, int), TableLayoutPanel> BoxPanels { get; init; }
-    public FrozenDictionary<(int, int), FrozenDictionary<(int, int), Label>> BoxCellLabels { get; init; }
+    public FrozenDictionary<CellLocation, Label> BoxCellLabels { get; init; }
+    public FrozenDictionary<CellLocation, CellEntity> BoxCellEntities { get; init; }
     public Label? SelectedCellLabel
     {
         get => selectedCellLabel;
@@ -33,8 +33,8 @@ public partial class MainForm : Form
         this.Height = 300 + offsetHeight;
 
         var size = 3;
-        var boxPanels = new Dictionary<(int, int), TableLayoutPanel>();
-        var boxCellLabels = new Dictionary<(int, int), Dictionary<(int, int), Label>>();
+        var boxCellLabels = new Dictionary<CellLocation, Label>();
+        var boxCellEntities = new Dictionary<CellLocation, CellEntity>();
         var cellFont = new Font(this.Font.FontFamily, 12, FontStyle.Bold);
         this.BoardLayoutPanel.SuspendLayout();
         for (int boxRow = 0; boxRow < size; boxRow++)
@@ -47,10 +47,8 @@ public partial class MainForm : Form
                     Name = $"Box_{boxIndex}",
                     Margin = Padding.Empty,
                     Dock = DockStyle.Fill,
-                    Tag = (boxRow, boxColumn),
                     CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 };
-                boxPanels[(boxRow, boxColumn)] = boxPanel;
                 this.BoardLayoutPanel.Controls.Add(boxPanel);
                 this.BoardLayoutPanel.SetCellPosition(boxPanel, new TableLayoutPanelCellPosition(boxColumn, boxRow));
 
@@ -63,11 +61,11 @@ public partial class MainForm : Form
                     boxPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1.0f / size));
                 boxPanel.RowCount = size;
                 boxPanel.ColumnCount = size;
-                var cellLabels = new Dictionary<(int, int), Label>();
                 for (int cellRow = 0; cellRow < size; cellRow++)
                 {
                     for (int cellColumn = 0; cellColumn < size; cellColumn++)
                     {
+                        var cellLocation = new CellLocation(boxRow, boxColumn, cellRow, cellColumn);
                         var cellIndex = cellRow * size + cellColumn;
                         var cellLabel = new Label()
                         {
@@ -77,15 +75,17 @@ public partial class MainForm : Form
                             TextAlign = ContentAlignment.MiddleCenter,
                             AutoSize = false,
                             Dock = DockStyle.Fill,
-                            Tag = (boxRow, boxColumn, cellRow, cellColumn)
+                            Tag = cellLocation
                         };
                         cellLabel.MouseUp += this.CellLabel_MouseUp;
-                        cellLabels[(cellRow, cellColumn)] = cellLabel;
+                        boxCellLabels[cellLocation] = cellLabel;
                         boxPanel.Controls.Add(cellLabel);
                         boxPanel.SetCellPosition(cellLabel, new TableLayoutPanelCellPosition(cellColumn, cellRow));
+
+                        var cellEntity = new CellEntity(cellLocation);
+                        boxCellEntities[cellLocation] = cellEntity;
                     }
                 }
-                boxCellLabels[(boxRow, boxColumn)] = cellLabels;
                 boxPanel.ResumeLayout(true);
             }
         }
@@ -97,8 +97,9 @@ public partial class MainForm : Form
             Tag = menuIndex,
         }).ToArray());
         this.CellContextMenuStrip.ItemClicked += this.CellContextMenuStrip_ItemClicked;
-        this.BoxPanels = boxPanels.ToFrozenDictionary();
-        this.BoxCellLabels = boxCellLabels.ToFrozenDictionary(pair => pair.Key, pair => pair.Value.ToFrozenDictionary());
+
+        this.BoxCellLabels = boxCellLabels.ToFrozenDictionary();
+        this.BoxCellEntities = boxCellEntities.ToFrozenDictionary();
     }
 
     private void CellLabel_MouseUp(object? sender, MouseEventArgs e)
@@ -117,7 +118,20 @@ public partial class MainForm : Form
 
     private void CellContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
     {
-        if (SelectedCellLabel is null) return;
-        SelectedCellLabel.Text = e.ClickedItem?.Tag?.ToString();
+        if (SelectedCellLabel is null ||
+            e.ClickedItem?.Tag is not int targetNumber ||
+            SelectedCellLabel.Tag is not CellLocation cellLocation ||
+            !BoxCellEntities.TryGetValue(cellLocation, out var cellEntity)) return;
+        SelectedCellLabel.Text = targetNumber.ToString();
+        cellEntity.Number = targetNumber;
+    }
+
+    private void ClearStripButton_Click(object sender, EventArgs e)
+    {
+        foreach (var cellEntity in BoxCellEntities.Values)
+        {
+            cellEntity.Number = default;
+            cellEntity.ProbableSet.Clear();
+        }
     }
 }

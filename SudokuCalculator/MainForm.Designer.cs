@@ -33,6 +33,7 @@ partial class MainForm
         this.MainToolStrip = new ToolStrip();
         this.BoardLayoutPanel = new TableLayoutPanel();
         this.CellContextMenuStrip = new ContextMenuStrip(this.components);
+        this.MainToolStrip.SuspendLayout();
         this.SuspendLayout();
         // 
         // MainToolStrip
@@ -55,16 +56,15 @@ partial class MainForm
         this.BoardLayoutPanel.Name = "BoardLayoutPanel";
         this.BoardLayoutPanel.RowCount = 3;
         this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333321F));
-        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
+        this.BoardLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3333359F));
         this.BoardLayoutPanel.Size = new Size(300, 300);
         this.BoardLayoutPanel.TabIndex = 1;
         // 
         // CellContextMenuStrip
         // 
         this.CellContextMenuStrip.Name = "CellContextMenuStrip";
-        this.CellContextMenuStrip.Size = new Size(181, 26);
+        this.CellContextMenuStrip.Size = new Size(61, 4);
         // 
         // MainForm
         // 
@@ -78,6 +78,8 @@ partial class MainForm
         this.Name = "MainForm";
         this.StartPosition = FormStartPosition.CenterScreen;
         this.Text = "Sudoku Calculator";
+        this.MainToolStrip.ResumeLayout(false);
+        this.MainToolStrip.PerformLayout();
         this.ResumeLayout(false);
         this.PerformLayout();
     }
