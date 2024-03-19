@@ -19,8 +19,7 @@ public partial class MainForm : Form
         {
             var previousBoxCellLocation = selectedBoxCellLocation;
             selectedBoxCellLocation = value;
-            if (previousBoxCellLocation is not null &&
-                BoxCellLabels.TryGetValue(previousBoxCellLocation.Value, out var previousBoxCellLabel))
+            if (previousBoxCellLocation is not null)
             {
                 foreach (var relatedBoxCellLocation in this.GetRelatedBoxCells(previousBoxCellLocation.Value, GridSize))
                 {
