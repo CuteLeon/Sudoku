@@ -4,9 +4,8 @@ namespace SudokuCalculator;
 
 public class SudokuCalculator
 {
-    public void Calculate(FrozenDictionary<BoxCellLocation, CellEntity> cells)
+    public void Calculate(FrozenDictionary<BoxCellLocation, CellEntity> cells, byte size)
     {
-        byte size = 3;
         this.CalculateProbableSet(cells, size);
 
         while (true)
@@ -77,8 +76,37 @@ public class SudokuCalculator
         }
     }
 
-    protected IEnumerable<CellEntity> GetRowBoxCells(
+    public IEnumerable<CellEntity> GetRowBoxCells(
         FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte cellRow, byte size)
+    {
+        foreach (var rowBoxCellLocation in this.GetRowBoxCellLocations(boxLocation, cellRow, size))
+        {
+            if (cells.TryGetValue(rowBoxCellLocation, out var rowCellEntity))
+                yield return rowCellEntity;
+        }
+    }
+
+    public IEnumerable<CellEntity> GetColumnBoxCells(
+        FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte cellColumn, byte size)
+    {
+        foreach (var columnBoxCellLocation in this.GetColumnBoxCellLocations(boxLocation, cellColumn, size))
+        {
+            if (cells.TryGetValue(columnBoxCellLocation, out var columnCellEntity))
+                yield return columnCellEntity;
+        }
+    }
+
+    public IEnumerable<CellEntity> GetCurrentBoxCells(
+        FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte size)
+    {
+        foreach (var currentBoxCellLocation in this.GetCurrentBoxCellLocations(boxLocation, size))
+        {
+            if (cells.TryGetValue(currentBoxCellLocation, out var currentCellEntity))
+                yield return currentCellEntity;
+        }
+    }
+
+    public IEnumerable<BoxCellLocation> GetRowBoxCellLocations(Location boxLocation, byte cellRow, byte size)
     {
         for (byte boxIndex = 0; boxIndex < size; boxIndex++)
         {
@@ -89,16 +117,13 @@ public class SudokuCalculator
                 {
                     var rowCellLocation = new Location(cellRow, cellIndex);
                     var rowBoxCellLocation = new BoxCellLocation(rowBoxLocation, rowCellLocation);
-
-                    if (cells.TryGetValue(rowBoxCellLocation, out var rowCellEntity))
-                        yield return rowCellEntity;
+                    yield return rowBoxCellLocation;
                 }
             }
         }
     }
 
-    protected IEnumerable<CellEntity> GetColumnBoxCells(
-        FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte cellColumn, byte size)
+    public IEnumerable<BoxCellLocation> GetColumnBoxCellLocations(Location boxLocation, byte cellColumn, byte size)
     {
         for (byte boxIndex = 0; boxIndex < size; boxIndex++)
         {
@@ -109,24 +134,20 @@ public class SudokuCalculator
                 {
                     var columnCellLocation = new Location(cellIndex, cellColumn);
                     var columnBoxCellLocation = new BoxCellLocation(columnBoxLocation, columnCellLocation);
-
-                    if (cells.TryGetValue(columnBoxCellLocation, out var columnCellEntity))
-                        yield return columnCellEntity;
+                    yield return columnBoxCellLocation;
                 }
             }
         }
     }
 
-    protected IEnumerable<CellEntity> GetCurrentBoxCells(
-        FrozenDictionary<BoxCellLocation, CellEntity> cells, Location boxLocation, byte size)
+    public IEnumerable<BoxCellLocation> GetCurrentBoxCellLocations(Location boxLocation, byte size)
     {
         for (byte cellRow = 0; cellRow < size; cellRow++)
         {
             for (byte cellColumn = 0; cellColumn < size; cellColumn++)
             {
                 var currentBoxCellLocation = new BoxCellLocation(boxLocation, new Location(cellRow, cellColumn));
-                if (cells.TryGetValue(currentBoxCellLocation, out var currentCellEntity))
-                    yield return currentCellEntity;
+                yield return currentBoxCellLocation;
             }
         }
     }

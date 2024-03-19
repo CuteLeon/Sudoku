@@ -1,5 +1,4 @@
 using System.Collections.Frozen;
-using System.Diagnostics;
 
 namespace SudokuCalculator;
 
@@ -7,7 +6,7 @@ public partial class MainForm : Form
 {
     protected static Font ConfirmedFont = new Font(SystemFonts.DialogFont.FontFamily, 12, FontStyle.Bold);
     protected static Font ProbableFont = new Font(SystemFonts.DialogFont.FontFamily, 8, FontStyle.Regular);
-
+    private const byte GridSize = 3;
     private BoxCellLocation? selectedBoxCellLocation;
 
     protected FrozenDictionary<BoxCellLocation, Label> BoxCellLabels { get; init; }
@@ -22,10 +21,23 @@ public partial class MainForm : Form
             selectedBoxCellLocation = value;
             if (previousBoxCellLocation is not null &&
                 BoxCellLabels.TryGetValue(previousBoxCellLocation.Value, out var previousBoxCellLabel))
-                previousBoxCellLabel.BackColor = Color.Transparent;
-            if (selectedBoxCellLocation is not null &&
-                BoxCellLabels.TryGetValue(selectedBoxCellLocation.Value, out var selectedBoxCellLabel))
-                selectedBoxCellLabel.BackColor = Color.LightGray;
+            {
+                foreach (var relatedBoxCellLocation in this.GetRelatedBoxCells(previousBoxCellLocation.Value, GridSize))
+                {
+                    if (this.BoxCellLabels.TryGetValue(relatedBoxCellLocation, out var label))
+                        label.BackColor = Color.Transparent;
+                }
+            }
+            if (value.HasValue &&
+                BoxCellLabels.TryGetValue(value.Value, out var selectedBoxCellLabel))
+            {
+                foreach (var relatedBoxCellLocation in this.GetRelatedBoxCells(value.Value, GridSize))
+                {
+                    if (this.BoxCellLabels.TryGetValue(relatedBoxCellLocation, out var label))
+                        label.BackColor = Color.Gainsboro;
+                }
+                selectedBoxCellLabel.BackColor = Color.Silver;
+            }
         }
     }
 
@@ -38,7 +50,7 @@ public partial class MainForm : Form
         this.Width = 300 + offsetWidth;
         this.Height = 300 + offsetHeight;
 
-        var size = 3;
+        var size = GridSize;
         var boxCellLabels = new Dictionary<BoxCellLocation, Label>();
         var boxCellEntities = new Dictionary<BoxCellLocation, CellEntity>();
         this.BoardLayoutPanel.SuspendLayout();
@@ -53,6 +65,7 @@ public partial class MainForm : Form
                     Name = $"Box_{boxIndex}",
                     Margin = Padding.Empty,
                     Dock = DockStyle.Fill,
+                    BackColor = Color.White,
                     CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
                 };
                 this.BoardLayoutPanel.Controls.Add(boxPanel);
@@ -80,6 +93,7 @@ public partial class MainForm : Form
                             Margin = Padding.Empty,
                             TextAlign = ContentAlignment.MiddleCenter,
                             AutoSize = false,
+                            BackColor = Color.Transparent,
                             Dock = DockStyle.Fill,
                             Tag = boxCellLocation
                         };
@@ -107,6 +121,15 @@ public partial class MainForm : Form
 
         this.BoxCellLabels = boxCellLabels.ToFrozenDictionary();
         this.BoxCellEntities = boxCellEntities.ToFrozenDictionary();
+    }
+
+    private IEnumerable<BoxCellLocation> GetRelatedBoxCells(BoxCellLocation boxCellLocation, byte size)
+    {
+        var boxLocation = boxCellLocation.BoxLocation;
+        var cellLocation = boxCellLocation.CellLocation;
+        return this.SudokuCalculator.GetRowBoxCellLocations(boxLocation, cellLocation.Row, size)
+            .Concat(this.SudokuCalculator.GetColumnBoxCellLocations(boxLocation, cellLocation.Column, size))
+            .Concat(this.SudokuCalculator.GetCurrentBoxCellLocations(boxLocation, size));
     }
 
     private void CellLabel_MouseUp(object? sender, MouseEventArgs e)
@@ -148,9 +171,9 @@ public partial class MainForm : Form
         else
         {
             boxCellLabel.Font = ConfirmedFont;
-        boxCellLabel.Text = number.ToString();
-        boxCellEntity.Number = number;
-    }
+            boxCellLabel.Text = number.ToString();
+            boxCellEntity.Number = number;
+        }
     }
 
     private void RefreshCells()
@@ -193,7 +216,7 @@ public partial class MainForm : Form
             };
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
 
-            var size = 3;
+            var size = GridSize;
             var filePath = openFileDialog.FileName;
             var lines = File.ReadAllLines(filePath);
 
@@ -244,7 +267,7 @@ public partial class MainForm : Form
 
     private void CalculateStripButton_Click(object sender, EventArgs e)
     {
-        this.SudokuCalculator.Calculate(BoxCellEntities);
+        this.SudokuCalculator.Calculate(BoxCellEntities, GridSize);
         this.RefreshCells();
     }
 }
