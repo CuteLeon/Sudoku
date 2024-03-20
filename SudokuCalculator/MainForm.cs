@@ -33,9 +33,9 @@ public partial class MainForm : Form
                 foreach (var relatedBoxCellLocation in this.GetRelatedBoxCells(value.Value, GridSize))
                 {
                     if (this.BoxCellLabels.TryGetValue(relatedBoxCellLocation, out var label))
-                        label.BackColor = Color.Gainsboro;
+                        label.BackColor = Color.AliceBlue;
                 }
-                selectedBoxCellLabel.BackColor = Color.Silver;
+                selectedBoxCellLabel.BackColor = Color.SkyBlue;
             }
         }
     }
