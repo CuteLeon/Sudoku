@@ -11,20 +11,54 @@ public class SudokuCalculator
         while (true)
         {
             // 只有一个候选数的格
+            var applied = false;
             var detectedPairs = cells.Where(pair => !pair.Value.Number.HasValue && pair.Value.ProbableSet.Count == 1).ToArray();
             if (detectedPairs.Length != 0)
             {
                 foreach (var detectedPair in detectedPairs)
                 {
                     var cellEntity = detectedPair.Value;
-                    var boxLocation = detectedPair.Key.BoxLocation;
-                    var cellLocation = detectedPair.Key.CellLocation;
-                    if (cellEntity.ProbableSet.Count != 1) continue;
+                    if (cellEntity.ProbableSet.Count == 1)
+                    {
+                        applied = true;
+                        var number = cellEntity.ProbableSet.Single();
+                        this.SetBoxCellNumber(cells, cellEntity, number, size);
+                    }
+                }
+            }
 
-                    var number = cellEntity.ProbableSet.Single();
+            // 宫内只有一个侯选位置的数字
+            for (byte boxRow = 0; boxRow < size; boxRow++)
+            {
+                for (byte boxColumn = 0; boxColumn < size; boxColumn++)
+                {
+                    var boxLocation = new Location(boxRow, boxColumn);
+                    var boxCells = this.GetCurrentBoxCells(cells, boxLocation, size).ToArray();
+                    for (var number = 1; number <= size * size; number++)
+                    {
+                        var containedCells = boxCells.Where(entity => entity.ProbableSet.Contains(number)).ToArray();
+                        if (containedCells.Length == 1)
+                        {
+                            applied = true;
+                            var cellEntity = containedCells.Single();
+                            this.SetBoxCellNumber(cells, cellEntity, number, size);
+                        }
+                    }
+                }
+            }
+
+            // 所有条件不满足未取得任何进展，结束循环
+            if (!applied) break;
+        }
+    }
+
+    public void SetBoxCellNumber(FrozenDictionary<BoxCellLocation, CellEntity> cells, CellEntity cellEntity, int number, byte size)
+    {
                     cellEntity.Number = number;
                     cellEntity.ProbableSet.Clear();
 
+        var boxLocation = cellEntity.Location.BoxLocation;
+        var cellLocation = cellEntity.Location.CellLocation;
                     foreach (var rowBoxCell in this.GetRowBoxCells(cells, boxLocation, cellLocation.Row, size))
                     {
                         if (!rowBoxCell.Number.HasValue)
@@ -41,13 +75,6 @@ public class SudokuCalculator
                             currentBoxCell.ProbableSet.Remove(number);
                     }
                 }
-            }
-
-            // TODO: 宫内只有一个侯选位置的数字
-
-            // TODO: 所有条件不满足未取得任何进展，结束循环
-        }
-    }
 
     public void CalculateProbableSet(FrozenDictionary<BoxCellLocation, CellEntity> cells, byte size)
     {
