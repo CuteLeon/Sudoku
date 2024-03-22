@@ -10,36 +10,42 @@ public class SudokuCalculator
 
         while (true)
         {
+            // 只有一个候选数的格
             var detectedPairs = cells.Where(pair => !pair.Value.Number.HasValue && pair.Value.ProbableSet.Count == 1).ToArray();
-            if (detectedPairs.Length == 0) break;
-
-            foreach (var detectedPair in detectedPairs)
+            if (detectedPairs.Length != 0)
             {
-                var cellEntity = detectedPair.Value;
-                var boxLocation = detectedPair.Key.BoxLocation;
-                var cellLocation = detectedPair.Key.CellLocation;
-                if (cellEntity.ProbableSet.Count != 1) continue;
+                foreach (var detectedPair in detectedPairs)
+                {
+                    var cellEntity = detectedPair.Value;
+                    var boxLocation = detectedPair.Key.BoxLocation;
+                    var cellLocation = detectedPair.Key.CellLocation;
+                    if (cellEntity.ProbableSet.Count != 1) continue;
 
-                var number = cellEntity.ProbableSet.Single();
-                cellEntity.Number = number;
-                cellEntity.ProbableSet.Clear();
+                    var number = cellEntity.ProbableSet.Single();
+                    cellEntity.Number = number;
+                    cellEntity.ProbableSet.Clear();
 
-                foreach (var rowBoxCell in this.GetRowBoxCells(cells, boxLocation, cellLocation.Row, size))
-                {
-                    if (!rowBoxCell.Number.HasValue)
-                        rowBoxCell.ProbableSet.Remove(number);
-                }
-                foreach (var columnBoxCell in this.GetColumnBoxCells(cells, boxLocation, cellLocation.Column, size))
-                {
-                    if (!columnBoxCell.Number.HasValue)
-                        columnBoxCell.ProbableSet.Remove(number);
-                }
-                foreach (var currentBoxCell in this.GetCurrentBoxCells(cells, boxLocation, size))
-                {
-                    if (!currentBoxCell.Number.HasValue)
-                        currentBoxCell.ProbableSet.Remove(number);
+                    foreach (var rowBoxCell in this.GetRowBoxCells(cells, boxLocation, cellLocation.Row, size))
+                    {
+                        if (!rowBoxCell.Number.HasValue)
+                            rowBoxCell.ProbableSet.Remove(number);
+                    }
+                    foreach (var columnBoxCell in this.GetColumnBoxCells(cells, boxLocation, cellLocation.Column, size))
+                    {
+                        if (!columnBoxCell.Number.HasValue)
+                            columnBoxCell.ProbableSet.Remove(number);
+                    }
+                    foreach (var currentBoxCell in this.GetCurrentBoxCells(cells, boxLocation, size))
+                    {
+                        if (!currentBoxCell.Number.HasValue)
+                            currentBoxCell.ProbableSet.Remove(number);
+                    }
                 }
             }
+
+            // TODO: 宫内只有一个侯选位置的数字
+
+            // TODO: 所有条件不满足未取得任何进展，结束循环
         }
     }
 
