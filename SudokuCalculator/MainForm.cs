@@ -210,27 +210,12 @@ public partial class MainForm : Form
         {
             this.ClearCells();
 
-            //using var openFileDialog = new OpenFileDialog()
-            //{
-            //};
-            //if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+            using var openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
 
             var size = GridSize;
-            //var filePath = openFileDialog.FileName;
-            //var lines = File.ReadAllLines(filePath);
-
-            var lines = new string[]
-            {
-                "  796   8",
-                "     2 1 ",
-                "2        ",
-                "  4  9   ",
-                "   5 68  ",
-                "   1     ",
-                "7  32   9",
-                "91   53  ",
-                " 6    45 "
-            };
+            var filePath = openFileDialog.FileName;
+            var lines = File.ReadAllLines(filePath);
             if (lines.Length != size * size) throw new FileFormatException($"File lines count [{lines.Length}] invalid.");
             var invalidLines = lines.Select((line, index) => (line, index)).Where(tuple => tuple.line.Length != size * size).ToArray();
             if (invalidLines.Any())

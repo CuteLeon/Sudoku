@@ -1,4 +1,5 @@
 ﻿using System.Collections.Frozen;
+using System.Diagnostics;
 
 namespace SudokuCalculator;
 
@@ -47,34 +48,121 @@ public class SudokuCalculator
                 }
             }
 
-            // 所有条件不满足未取得任何进展，结束循环
+            // 所有条件不满足未取得任何进展，结束循环 坏蛋leon一个人偷偷唱歌 --Coco
             if (!applied) break;
+        }
+
+        var unnumberedCells = cells.Values.Where(cellEntity => !cellEntity.Number.HasValue).ToArray();
+        if (unnumberedCells.Any())
+        {
+            var rowNumberSets = cells.Values
+                .GroupBy(cellEntity => new Dimension(cellEntity.Location.BoxLocation.Row, cellEntity.Location.CellLocation.Row))
+                .ToFrozenDictionary(
+                    group => group.Key,
+                    group => group
+                        .Where(cellEntity => cellEntity.Number.HasValue)
+                        .Select(cellEntity => cellEntity.Number!.Value)
+                        .ToHashSet());
+            var columnNumberSets = cells.Values
+                .GroupBy(cellEntity => new Dimension(cellEntity.Location.BoxLocation.Column, cellEntity.Location.CellLocation.Column))
+                .ToFrozenDictionary(
+                    group => group.Key,
+                    group => group
+                        .Where(cellEntity => cellEntity.Number.HasValue)
+                        .Select(cellEntity => cellEntity.Number!.Value)
+                        .ToHashSet());
+            var boxNumberSets = cells.Values
+                .GroupBy(cellEntity => cellEntity.Location.BoxLocation)
+                .ToFrozenDictionary(
+                    group => group.Key,
+                    group => group
+                        .Where(cellEntity => cellEntity.Number.HasValue)
+                        .Select(cellEntity => cellEntity.Number!.Value)
+                        .ToHashSet());
+
+            var results = new List<FrozenDictionary<BoxCellLocation, int>>();
+            this.DeepScan(unnumberedCells, 0, rowNumberSets, columnNumberSets, boxNumberSets, results);
+            Debug.Print($"Scaned result(s): {results.Count:N0}");
+            var result = results.FirstOrDefault();
+            if (result is not null)
+            {
+                foreach (var pair in result)
+                {
+                    if (cells.TryGetValue(pair.Key, out var cellEntity))
+                    {
+                        this.SetBoxCellNumber(cells, cellEntity, pair.Value, size);
+                    }
+                }
+            }
+        }
+    }
+
+    public void DeepScan(
+        CellEntity[] unnumberedCells, int cellIndex,
+        FrozenDictionary<Dimension, HashSet<int>> rowNumberSets,
+        FrozenDictionary<Dimension, HashSet<int>> columnNumberSets,
+        FrozenDictionary<Location, HashSet<int>> boxNumberSets,
+        List<FrozenDictionary<BoxCellLocation, int>> results)
+    {
+        if (cellIndex >= unnumberedCells.Length) return;
+
+        var currentCell = unnumberedCells[cellIndex];
+        var boxLocation = currentCell.Location.BoxLocation;
+        var cellLocation = currentCell.Location.CellLocation;
+        var rowNumberSet = rowNumberSets[new Dimension(boxLocation.Row, cellLocation.Row)];
+        var columnNumberSet = columnNumberSets[new Dimension(boxLocation.Column, cellLocation.Column)];
+        var boxNumberSet = boxNumberSets[boxLocation];
+        foreach (var probNumber in currentCell.ProbableSet)
+        {
+            if (rowNumberSet.Contains(probNumber) ||
+                columnNumberSet.Contains(probNumber) ||
+                boxNumberSet.Contains(probNumber))
+                continue;
+            rowNumberSet.Add(probNumber);
+            columnNumberSet.Add(probNumber);
+            boxNumberSet.Add(probNumber);
+            currentCell.Number = probNumber;
+
+            if (cellIndex < unnumberedCells.Length - 1)
+            {
+                this.DeepScan(unnumberedCells, cellIndex + 1, rowNumberSets, columnNumberSets, boxNumberSets, results);
+            }
+            else
+            {
+                var result = unnumberedCells.ToFrozenDictionary(cellEntity => cellEntity.Location, cellEntity => cellEntity.Number!.Value);
+                results.Add(result);
+            }
+
+            currentCell.Number = default;
+            rowNumberSet.Remove(probNumber);
+            columnNumberSet.Remove(probNumber);
+            boxNumberSet.Remove(probNumber);
         }
     }
 
     public void SetBoxCellNumber(FrozenDictionary<BoxCellLocation, CellEntity> cells, CellEntity cellEntity, int number, byte size)
     {
-                    cellEntity.Number = number;
-                    cellEntity.ProbableSet.Clear();
+        cellEntity.Number = number;
+        cellEntity.ProbableSet.Clear();
 
         var boxLocation = cellEntity.Location.BoxLocation;
         var cellLocation = cellEntity.Location.CellLocation;
-                    foreach (var rowBoxCell in this.GetRowBoxCells(cells, boxLocation, cellLocation.Row, size))
-                    {
-                        if (!rowBoxCell.Number.HasValue)
-                            rowBoxCell.ProbableSet.Remove(number);
-                    }
-                    foreach (var columnBoxCell in this.GetColumnBoxCells(cells, boxLocation, cellLocation.Column, size))
-                    {
-                        if (!columnBoxCell.Number.HasValue)
-                            columnBoxCell.ProbableSet.Remove(number);
-                    }
-                    foreach (var currentBoxCell in this.GetCurrentBoxCells(cells, boxLocation, size))
-                    {
-                        if (!currentBoxCell.Number.HasValue)
-                            currentBoxCell.ProbableSet.Remove(number);
-                    }
-                }
+        foreach (var rowBoxCell in this.GetRowBoxCells(cells, boxLocation, cellLocation.Row, size))
+        {
+            if (!rowBoxCell.Number.HasValue)
+                rowBoxCell.ProbableSet.Remove(number);
+        }
+        foreach (var columnBoxCell in this.GetColumnBoxCells(cells, boxLocation, cellLocation.Column, size))
+        {
+            if (!columnBoxCell.Number.HasValue)
+                columnBoxCell.ProbableSet.Remove(number);
+        }
+        foreach (var currentBoxCell in this.GetCurrentBoxCells(cells, boxLocation, size))
+        {
+            if (!currentBoxCell.Number.HasValue)
+                currentBoxCell.ProbableSet.Remove(number);
+        }
+    }
 
     public void CalculateProbableSet(FrozenDictionary<BoxCellLocation, CellEntity> cells, byte size)
     {

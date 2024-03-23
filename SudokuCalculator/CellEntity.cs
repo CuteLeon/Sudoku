@@ -1,5 +1,27 @@
 ﻿namespace SudokuCalculator;
 
+public struct Dimension
+{
+    public byte Box;
+    public byte Cell;
+
+    public Dimension(byte box, byte cell)
+    {
+        this.Box = box;
+        this.Cell = cell;
+    }
+
+    public Dimension Clone()
+    {
+        return new Dimension(Box, Cell);
+    }
+
+    public override string ToString()
+    {
+        return $"[{this.Box}] [{this.Cell}]";
+    }
+}
+
 public struct Location
 {
     public byte Row;
