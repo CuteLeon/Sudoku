@@ -48,7 +48,7 @@ public class SudokuCalculator
                 }
             }
 
-            // 所有条件不满足未取得任何进展，结束循环 坏蛋leon一个人偷偷唱歌 --Coco
+            // 所有条件不满足未取得任何进展，结束循环 坏蛋Leon一个人偷偷唱歌 --Coco
             if (!applied) break;
         }
 
@@ -82,7 +82,7 @@ public class SudokuCalculator
 
             var results = new List<FrozenDictionary<BoxCellLocation, int>>();
             this.DeepScan(unnumberedCells, 0, rowNumberSets, columnNumberSets, boxNumberSets, results);
-            Debug.Print($"Scaned result(s): {results.Count:N0}");
+            Debug.Print($"Scanned result(s): {results.Count:N0}");
             var result = results.FirstOrDefault();
             if (result is not null)
             {
